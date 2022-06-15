@@ -10,11 +10,22 @@ Helper functions for analyzing JWST data
 Install jwst_tools with pip
 
 ```bash
-  pip install jwst_tools
+  cd /path/to/jwst_tools
+  pip install .
 ```
 
-## Requirements* numpy
+## Requirements
+* numpy
+* pandas
+* pathlib
+* matplotlib
+* jwst (jwst-pipeline.readthedocs.io)
 
-# JWST tools
+
+## JWST tools
+* read.py - tools for organizing files downloaded from MAST
+* dq_utils.py - tools for examining the DQ header
+* utils.py - miscellaneous, some has been folded into other modules
+* plot_utils.py - tools for plotting files and apertures. kinda weird and scattershot
 
 Author: Jonathan Aguilar
