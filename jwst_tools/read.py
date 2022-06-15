@@ -222,7 +222,7 @@ def organize_mast_files(files: list, extra_keys: dict[str, int] = {}):
     data_organizer = pd.concat([pd.Series(parse_mast_filename(Path(fname)))
                                 for fname in files], axis=1).T
     data_organizer.reset_index(inplace=True)
-    data_organizer.rename(columns={'index': 'id'})
+    data_organizer.rename(columns={'index': 'id'}, inplace=True)
     # add any extra keyword values
     for key, hdr in extra_keys.items():
         data_organizer[key.lower()] = data_organizer.apply(lambda row: fits.getval(Path(row['path']) / row['filename'], key.upper(), hdr), axis=1)
