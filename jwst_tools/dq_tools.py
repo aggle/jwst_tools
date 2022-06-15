@@ -4,12 +4,9 @@ Tools for manipulating and parsing DQ images
 import matplotlib as mpl
 from matplotlib import pyplot as plt
 import numpy as np
-import pandas as pd
 
-from astropy.io import fits
 
 from pysiaf import Siaf
-from jwst import datamodels
 from jwst.datamodels import dqflags
 
 def separate_dq_flags(dq_img):

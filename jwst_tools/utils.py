@@ -10,15 +10,6 @@ import pandas as pd
 from shapely.geometry import Point
 from shapely.geometry.polygon import Polygon, LinearRing
 
-from astropy.io import fits
-from astropy import units
-from astropy.stats import sigma_clipped_stats
-from astropy.wcs import WCS
-
-from photutils.detection import DAOStarFinder, IRAFStarFinder
-from photutils.aperture import CircularAperture
-from photutils.centroids import centroid_sources, centroid_1dg, centroid_2dg
-
 import pysiaf
 from pysiaf import Siaf
 from jwst.datamodels import dqflags
