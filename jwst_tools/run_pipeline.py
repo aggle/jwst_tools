@@ -68,7 +68,7 @@ prev_stage_file_id : which file or files are the progenitors for this one
 
 When a new file is generated, it will be added to the end of the file manager dataframe
 """
-def initialize_files(files, stage):
+def initialize_files(files: list, stage: str):
     """
     Put the files into a pandas dataframe that will be used to organize the way
     they are processed through the stages.
@@ -77,7 +77,7 @@ def initialize_files(files, stage):
     df = read.organize_mast_files(files)
     df.rename(columns={'index': 'file_id'})
     df['stage'] = stage
-    df['prev_stage_file_id'] = None
+    df['prev_stage_file_id'] = pd.NA
     return df
 
 
@@ -89,85 +89,93 @@ Need to be able to:
  - override reference files
  - collect files together
 """
-def run_stage2(stage_id, filename, params):
+
+# trying to write a generic pipeline is too complicated. Write a stage-specific one.
+def run_stage2a(row, params):
     """
-    Run a pipeline stage 2a or 2b on a given file with given parameters, and return a
-    pandas series with the results
+    Run pipeline stage 2a (uncal -> rate/rateints) with the given parameters
 
     Parameters
     ----------
-    stage_id: str
-      '2a', '2b', or '3', corresponding to Detector1, Image2, or Coron3
-    filename: string or pathlib.Path
-      file to process to the next stage
+    row: row of the file manager dataframe
     params: stage parameters
 
     Output
     ------
-    no output, just writing files to disk
+    no output; write files to disk
 
     """
-    stage = stages[str(stage_id)]
-    # stage_manager = pd.Series(None,
-    #                           index=['filename', 'pass', 'prod', 'prod_ints'],
-    #                           dtype=str)
-    # # initialize output columns
-    # stage_manager['filename'] = filename
-    # stage_manager['pass'] = False # set to True if stage passes
-    # stage_manager['prod'] = None
-    # stage_manager['prodints'] = None
-    # process a file and return the output product(s)
-    # f = Path(stage_manager['filename'])
-    # the stage.call method creates and runs a new instance of the class
+    filename = Path(row['path']) / row['filename']
+    stage = stages['2a']
     res = stage.call(str(filename), **params)
+
     # find all the output files
-    output_files = []
-    for f in sorted(Path(params['output_dir']).glob("_".join(str(filename).split("_")[:-1])+"*.fits")):
-        vals = pd.Series({'filename': str(f), 'stage': stage_id})
-        output_files.append(vals)
-        print(vals)
-    stage_manager = pd.concat(output_files)
+    outname_stem = str(filename.stem).replace('uncal', 'rate')
+    output_files = Path(params['output_dir']).glob(outname_stem+"*.fits")
 
-    return stage_manager, res
+    stage_manager = []
+    for f in output_files:
+        # these are the fields that need to be updated for the output
+        output_info = {'path': Path(params['output_dir']).resolve(),
+                       'filename': str(f),
+                       'prod_type': f.stem.split('_')[-1],
+                       'stage': '2a',
+                       'prev_stage_file_id': row['id']}
+        # copy over the row data and update the relevant fields
+        stage_manager.append(pd.Series({k: row[k] for k in row.index}))
+        for k, v in output_info.items():
+            stage_manager[-1][k] = v
 
+    return pd.concat(stage_manager, ignore_index=True)
 
-def run_stage1(file_manager, stage1_params):
+def run_stage2b(row, params):
     """
-    Run Stage 1
+    Run pipeline stage 2b (rate/rateints -> cal/calints) with the given parameters
 
     Parameters
     ----------
-    define your parameters
+    row: row of the file manager dataframe
+    params: stage parameters
 
     Output
     ------
-    Define your output
+    no output; write files to disk
 
     """
-    for i, f in sorted(files['filename'].items()):
-        f = Path(f)
-        print(f"\n\nProcessing {int(i)+1} of {len(files)} ({str(f.name)})\n\n")
-        # Below you can choose how you want to provide the parameters by setting the switch to True
-        try:
-            det1 = Detector1Pipeline.call(str(f), **stage1_params)
-            files.loc[i, 'stage1_pass'] = True
-        except:
-            pass
+    filename = Path(row['path']) / row['filename']
+    stage = stages['2b']
+    res = stage.call(str(filename), **params)
 
-def run_stage2(files, stage2_params):
-    pass
+    # for stage 2b, there should only be one output file
+    outname = str(filename.name).replace('rate', 'cal')
+    output_file = Path(params['output_dir']) / outname
+    try:
+        assert(output_file.exists)
+    except AssertionError:
+        output_file = None
 
-def run_stage3(assn_file, stage3_params):
-    pass
+    # these are the fields that need to be updated for the output
+    output_info = {'path': Path(params['output_dir']).resolve(),
+                   'filename': str(outname),
+                   'prod_type': output_file.stem.split('_')[-1],
+                   'stage': '2b',
+                   'prev_stage_file_id': row['id']}
+    # copy over the row data and update the relevant fields
+    stage_manager = pd.Series({k: row[k] for k in row.index})
+    for k, v in output_info.items():
+        stage_manager[k] = v
+    return stage_manager
+
+
 
 """
 Pipeline wrapper
 """
-pipeline_params = {'stage1': {'save_results': True},
-                   'stage2': {'save_results': True},
-                   'stage3': {'save_results': True}}
-def run_pipeline(input_files, input_stage, stages_to_run,
-                 output_folder='.', params={}):
+default_params = {'2a': {'save_results': True},
+                  '2b': {'save_results': True},
+                  '3' : {'save_results': True}}
+def run_pipeline(input_files: list, input_stage: str, stages_to_run: list,
+                 output_folder: str = '.', params: dict = {}):
     """
     Organize and manage running the requested pipeline stages
 
@@ -184,7 +192,7 @@ def run_pipeline(input_files, input_stage, stages_to_run,
       Folder in which to store the pipeline output
     params: dictionary [{}]
       Dictionary of stage parameters. Includes reference file overrides.
-      Format is {'stageN': {'step_name': {'arg': val pairs}}
+      Format is {'2a': {'step_name': {'arg': val pairs}} for e.g. stage 2a
 
     Output
     ------
@@ -198,4 +206,25 @@ def run_pipeline(input_files, input_stage, stages_to_run,
 
     print(f"Running pipeline version {PIPELINE_VERSION}", file=logfile)
 
-    pipeline_params.update(params)
+    # set default values without overriding, and output directory
+    for k1 in params.keys():
+        for k2, v2 in default_params[k1].items():
+            params[k1].setdefault(k2, v2)
+            params[k1]['output_dir'] = output_folder
+
+    run_manager = initialize_files(input_files, input_stage)
+    # loop through stages and run them
+    for stage_id in sorted(stages_to_run):
+        if stage_id == '2a':
+            results = run_manager.apply(run_stage2a, params=params['2a'], axis=1)
+            results['id'] = results.index + len(run_manager)
+            run_manager = run_manager.append(results, ignore_index=True)
+        elif stage_id == '2b':
+            results = run_manager.apply(run_stage2b, params=params['2b'], axis=1)
+            results['id'] = results.index + len(run_manager)
+            run_manager = run_manager.append(results, ignore_index=True)
+        elif stage_id == '3':
+            pass
+        else:
+            print(f"No such stage_id {stage_id} (in {stages_to_run})")
+    return run_manager
