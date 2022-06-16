@@ -221,6 +221,9 @@ def organize_mast_files(files: list, extra_keys: dict[str, int] = {}):
             ff = files.pop(i)
     data_organizer = pd.concat([pd.Series(parse_mast_filename(Path(fname)))
                                 for fname in files], axis=1).T
+    # pull out the file stem; useful for connecting pipeline products
+    data_organizer['filestem'] = \
+        data_organizer['filename'].apply(lambda el: '_'.join(el.split('_')[:-1]))
     data_organizer.reset_index(inplace=True)
     data_organizer.rename(columns={'index': 'id'}, inplace=True)
     # add any extra keyword values
