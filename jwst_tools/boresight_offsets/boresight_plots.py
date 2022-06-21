@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import matplotlib as mpl
 from matplotlib import pyplot as plt
 import numpy as np
@@ -5,10 +7,10 @@ import numpy as np
 from astropy.io import fits
 
 # local to jwst_tools
-import plot_utils
+from .. import plot_utils
 
 
-def confirm_psf_centroids(centroids_dfs, saveto=None):
+def confirm_psf_centroids(centroids_df, saveto=None):
     """
     Plot the centroids on top of cutouts of the psfs
 
@@ -36,7 +38,8 @@ def confirm_psf_centroids(centroids_dfs, saveto=None):
             ax = axes[row_ind, col_ind]
 
             row = group.loc[ind]
-            img, coords = plot_utils.img_cutout(fits.getdata(mast_data_path / row['filename']), 
+            filename = Path(row['path']) / row['filename']
+            img, coords = plot_utils.img_cutout(fits.getdata(filename, 1), 
                                                 row[['y', 'x']],
                                                 31, 
                                                 True)
@@ -60,3 +63,29 @@ def confirm_psf_centroids(centroids_dfs, saveto=None):
             
     if saveto is not None:
        fig.savefig(saveto, dpi=150)
+    return fig
+
+
+def plot_centroids_v_position(offsets_df):
+    """
+    Docstring goes here
+
+    Parameters
+    ----------
+    any other parameters?
+    ax : plt.axis [None]
+      optional: provide the axis to draw on
+
+    Output
+    ------
+    fig : plt.Figure instance
+      if ax is given, returns a reference to the parent figure
+    """
+    if ax == None:
+      fig, ax = plt.subplots(1, 1)
+    else:
+      fig = ax.get_figure()
+
+    ## insert body here ##
+
+    return fig

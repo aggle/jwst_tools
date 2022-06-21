@@ -2,7 +2,7 @@
 Module for helping compute boresight offsets.
 Steps for computing boresight offsets:
 1. [x] Measure PSF centroids around the subarray
-   a. [ ] Plot centroids on cutouts of the PSF for confirmation
+   a. [x] Plot centroids on cutouts of the PSF for confirmation
 2. [x] Mark which are from the reference filters and which are not
 3. [x] Compute difference between the reference and non-reference filters
 4. [ ] Plot the offsets, per filter, as a function of x and y position on the subarray
@@ -13,7 +13,7 @@ Steps for computing boresight offsets:
 
 import pandas as pd
 
-import read as jwread
+from .. import read as jwread
 
 # list the filters used by the coronagraphs
 filters = {'TA': ['F560W', 'F1000W', 'F1500W', 'FND'],
@@ -134,3 +134,20 @@ def compute_filter_offsets(centroids_df):
     filter_offsets = gb.apply(relative_position)
 
     return centroids_df.join(filter_offsets)
+
+
+def fit_offsets_v_position(offsets_df):
+    """
+    Fit the offsets against the position on the detector with a line
+
+    Parameters
+    ----------
+    offsets_df: centroids dataframe with the offsets
+
+    Output
+    ------
+    lines_df: dataframe of line parameters (y = p[0] + p[1]*x)
+      the index of the parameter is its order (e.g. p[0]*x^0 + p[1]*x^1)
+
+    """
+    pass # insert body here
