@@ -166,7 +166,27 @@ def run_stage2b(row, params):
         stage_manager[k] = v
     return stage_manager
 
+def run_stage3(asn_file, params):
+    """
+    Run pipeline stage 3 (calints -> psf-subtracted product) with the given
+    parameters
 
+    Parameters
+    ----------
+    asn_file: string or pathlib.Path to file
+      association file as defined in https://jwst-docs.stsci.edu/understanding-jwst-data-files/jwst-data-associations
+    params: dict
+      stage 3 parameters
+
+    Output
+    ------
+    nothing; output written to provided output folder
+
+    """
+    cor3 = Coron3Pipeline.call(str(asn_file), **params)
+    # collect stage 3 products
+    # for now, just return the object
+    return cor3
 
 """
 Pipeline wrapper
