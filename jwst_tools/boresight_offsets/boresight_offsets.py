@@ -11,9 +11,11 @@ Steps for computing boresight offsets:
 7. [ ] Write the central offset to a file and send it off to be included in SIAF
 """
 
+import numpy as np
 import pandas as pd
 
 from .. import read as jwread
+from .. import utils as jwutils
 
 # list the filters used by the coronagraphs
 filters = {'TA': ['F560W', 'F1000W', 'F1500W', 'FND'],
@@ -99,6 +101,10 @@ def load_psf_centroid_file(filepath):
     # mark the science filters as the references
     is_ref = lambda filt: 'y' if filt in filters['Sci'] else 'n'
     centroids_df['reference'] = centroids_df['filter'].apply(is_ref)
+    # get the nearest TA ROI region
+    get_roi = lambda row: determine_ta_region(*row[['x','y']],
+                                              jwutils.miri_siaf['MIRIM_'+row['subarray']])
+    centroids_df['roi'] = centroids_df.apply(get_roi, axis=1)
     return centroids_df
 
 
@@ -150,4 +156,50 @@ def fit_offsets_v_position(offsets_df):
       the index of the parameter is its order (e.g. p[0]*x^0 + p[1]*x^1)
 
     """
-    pass # insert body here
+    # fit a line to the Lyot data, using all, inner only, and outer only
+    def fit_lines(filter_group):
+        # fit x
+        x, dx = filter_group[['x', 'dx']].values.T
+        y, dy = filter_group[['off_x', 'off_dx']].values.T
+        x_line = np.polyfit(x, y, 1, w=1/dy)[::-1] # returns b, m (y = b + m*x)
+
+        # fit y
+        x, dx = filter_group[['y', 'dy']].values.T
+        y, dy = filter_group[['off_y', 'off_dy']].values.T
+        y_line = np.polyfit(x, y, 1, w=1/dy)[::-1]
+
+        df = pd.concat({'off_x': pd.Series(x_line, index=pd.Index(range(len(x_line)), name='param')), 
+                        'off_y': pd.Series(y_line, index=pd.Index(range(len(y_line)), name='param'))},
+                       axis=1)
+        return df
+    lines_df = offsets_df.query(f"reference == 'n'").groupby(['subarray', 'filter']).apply(fit_lines)
+    return lines_df.unstack('param')
+
+def compute_offset_at_center(offsets_df, lines_df, centers_df):
+    """
+    For a given subarray and filter pair, use the line fitted to that data to
+    predict the boresight offset in the center of the subarray
+
+    Parameters
+    ----------
+    offsets_df : pd.DataFrame
+      dataframe containing the offsets and other metadata
+    lines_df : pd.DataFrame
+      dataframe with the line parameters stored as y = p[0] + p[1]*x
+    centers_df : pd.DataFrame
+      dataframe or dict with the x,y centers for each subarray, in pixels
+
+    Output
+    ------
+    center_offsets_df : pd.DataFrame of offsets at the center of the
+      subarrays, per filter combination
+
+    """
+
+    center_offsets_df = {}
+    for subarray, filt in lines_df.index:
+        line = lines_df.loc[(subarray, filt)]
+        x_center = line['off_x'][0] + line['off_x'][1]*centers_df.loc[subarray[-4:], 'x']
+        y_center = line['off_y'][0] + line['off_y'][1]*centers_df.loc[subarray[-4:], 'y']
+        center_offsets_df[(subarray, filt)] = pd.Series({'x': x_center, 'y': y_center})
+    return pd.concat(center_offsets_df, axis=1).T
