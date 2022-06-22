@@ -5,10 +5,11 @@ Steps for computing boresight offsets:
    a. [x] Plot centroids on cutouts of the PSF for confirmation
 2. [x] Mark which are from the reference filters and which are not
 3. [x] Compute difference between the reference and non-reference filters
-4. [ ] Plot the offsets, per filter, as a function of x and y position on the subarray
-5. [ ] Fit the offset vs x/y with a line
-6. [ ] Use the line to compute the offset at the center (or at any other location in the subarray)
-7. [ ] Write the central offset to a file and send it off to be included in SIAF
+4. [x] Plot the offsets, per filter, as a function of x and y position on the subarray
+5. [x] Fit the offset vs x/y with a line
+6. [x] Use the line to compute the offset at the center (or at any other location in the subarray)
+7. [x] Write the central offset to a file and send it off to be included in SIAF
+8. [ ] compare to the CDP boresights from miricoord
 """
 
 import numpy as np
@@ -174,6 +175,7 @@ def fit_offsets_v_position(offsets_df):
         return df
     lines_df = offsets_df.query(f"reference == 'n'").groupby(['subarray', 'filter']).apply(fit_lines)
     return lines_df.unstack('param')
+
 
 def compute_offset_at_center(offsets_df, lines_df, centers_df):
     """
