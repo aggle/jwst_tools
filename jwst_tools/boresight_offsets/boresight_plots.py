@@ -7,7 +7,9 @@ import numpy as np
 from astropy.io import fits
 
 # local to jwst_tools
-from .. import plot_utils
+from .. import plot_utils as jwplots
+from .. import utils as jwutils
+from . import boresight_offsets as bso
 
 
 def confirm_psf_centroids(centroids_df, saveto=None):
@@ -26,33 +28,34 @@ def confirm_psf_centroids(centroids_df, saveto=None):
     centroids_fig: mpl.plt.Figure object
 
     """
-    nrows = len(centroids_df['filter'].unique())
-    ncols = int(np.ceil(len(centroids_df)/nrows))
+    centroids_gb = centroids_df.groupby(['prog_id', 'obs_num'])
+    # one row for each filter, one column for each observing sequence
+    col_names = {i: j for j, i in enumerate(['ref'] + bso.filters['TA'])}
+    row_names = {i[0]: j for j, i in enumerate(centroids_gb)}
+    nrows = len(row_names) # 1 row for each set of observations
+    ncols = len(col_names) # 1 reference and 4 TA filters 
 
     fig, axes = plt.subplots(nrows=nrows, ncols=ncols, figsize=(5*ncols, 5*nrows),
-                            sharex='col', sharey='col')
+                             sharex='row', sharey='row')
 
-    for col_ind, (name, group_ind) in enumerate(centroids_df.groupby('obs_num').groups.items()):
-        group = centroids_df.loc[group_ind]
-        for row_ind, ind in enumerate(group.index):
-            ax = axes[row_ind, col_ind]
-
-            row = group.loc[ind]
+    for name, group in centroids_gb:
+        for i, row in group.iterrows():
+            # select the axis, and label it
+            # row is the observation
+            ax_row = row_names[name]
+            # column is the filter
+            ax_col = 0 if row['reference'] == 'y' else col_names[row['filter']]
+            ax = axes[ax_row, ax_col]
+            ax.set_ylabel(row['filter'])
+            ax.set_title(f"{name[0]}, Obs {name[1]}")
+            # get the stamp
             filename = Path(row['path']) / row['filename']
-            img, coords = plot_utils.img_cutout(fits.getdata(filename, 1), 
+            img, coords = jwplots.img_cutout(fits.getdata(filename, 1), 
                                                 row[['y', 'x']],
                                                 31, 
                                                 True)
             coords = [c-0.5 for c in coords]
-            vmin, vmax = plot_utils.get_vlims(img, -1, 3)
-            # full image plotting
-        #     img = fits.getdata(mast_data_path / row['file'])
-        #     coords = [np.arange(i+1)-0.5 for in img.shape[::-1]]
-
-            if row_ind == 0:
-                ax.set_title(f"Obs {row['obs_num']}", size='xx-large')
-            if col_ind == 0:
-                ax.set_ylabel(f"{row['filter']}", size='xx-large')
+            vmin, vmax = jwplots.get_vlims(img, -1, 3)
 
 
             ax.pcolor(coords[1], coords[0], img, vmin=vmin, vmax=vmax)
@@ -103,7 +106,7 @@ def plot_centroids_v_position_2d(offsets_df, saveto=None):
                         xerr=group['off_dx'], yerr=group['off_dy'],
                         ls='-', marker='o', label=f"{filt}")
         
-        ax.legend(ncol=1, loc='center left')
+        ax.legend(ncol=1, loc='best')
         ax.grid(True, alpha=1)
 
     if saveto is not None:
@@ -111,7 +114,10 @@ def plot_centroids_v_position_2d(offsets_df, saveto=None):
     return fig
 
 
-def plot_centroids_v_position_1d(offsets_df, saveto=None, lines=None, centers=None):
+def plot_centroids_v_position_1d(offsets_df, saveto=None,
+                                 lines=None,
+                                 center_offsets=None,
+                                 subarray_centers=None):
     """
     Plot the offset against the position on the detector, x and y
 
@@ -145,12 +151,15 @@ def plot_centroids_v_position_1d(offsets_df, saveto=None, lines=None, centers=No
 
     for coord, ax_row in zip(['x', 'y'], [0, 1]):
         for subarray, ax in zip(subarrays, axes[ax_row]):
+            aper = jwutils.miri_siaf['MIRIM_'+subarray]
             # descriptions
             ax.set_title(subarray, size='x-large')
             ax.set_xlabel(f"{coord} [pix]")
             ax.set_ylabel(f"{coord} offset [pix]")
             # plot a line at 0 offset
-            ax.axhline(0, ls='--', color='k', label='No offset')
+            ax.axhline(0, ls='-', color='k', label='No offset')
+
+            coron_filter = bso.filters['Sci'][subarray[-4:]]
             # plot each filter in a different color
             subset = offsets_df.query(f"reference == 'n' and subarray == '{subarray}'")
             gb = subset.groupby('filter')
@@ -159,10 +168,26 @@ def plot_centroids_v_position_1d(offsets_df, saveto=None, lines=None, centers=No
                 errorbar = ax.errorbar(group[f'{coord}'], group[f'off_{coord}'],
                                        xerr=group[f'd{coord}'], yerr=group[f'off_d{coord}'],
                                        ls='', marker='o', 
-                                       label=f"{filt} - F{subarray}C")
+                                       label=f"{filt} - {coron_filter}")
                 color = errorbar.get_children()[0].get_color()
+                if lines is not None:
+                    line = lines.loc[(subarray, filt), 'off_'+coord]
+                    line_x = np.array([0, aper.XSciSize]) #np.array([group[coord].max(), group[coord].min()])
+                    dx = line_x[1]-line_x[0]
+                    # stretch the line by 10% past the ends
+                    line_x = np.array(line_x) + 0.10*dx*np.array([-1, 1])
+                    line_y = line[0] + line[1]*line_x
+                    ax.plot(line_x, line_y, ls='-.', color=color)
+                if center_offsets is not None:
+                    center_offset = center_offsets.loc[(subarray, filt)]
+                    subarray_center = subarray_centers.loc[subarray[-4:]]
+                    ax.scatter(subarray_center[coord], center_offset['d'+coord], marker='x', color=color)
 
             # dummy plots, for the legend
+            if lines is not None:
+                ax.plot([], [], color='k', ls='-.', label='linear fit')
+            if center_offsets is not None:
+                ax.scatter([], [], color='k', marker='x', label='center offset')
             ax.legend(ncol=2, loc='best', framealpha=0.2)
             ax.grid(True, alpha=1)
 

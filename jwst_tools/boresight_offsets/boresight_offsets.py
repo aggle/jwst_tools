@@ -8,10 +8,13 @@ Steps for computing boresight offsets:
 4. [x] Plot the offsets, per filter, as a function of x and y position on the subarray
 5. [x] Fit the offset vs x/y with a line
 6. [x] Use the line to compute the offset at the center (or at any other location in the subarray)
+   a. [ ] Plot lines and centers to confirm
 7. [x] Write the central offset to a file and send it off to be included in SIAF
-8. [ ] compare to the CDP boresights from miricoord
+8. [ ] Compare to the CDP boresights from miricoord
+9. [ ] Convert the offsets to arcsec taking into account distortion
 """
 
+from pathlib import Path
 import numpy as np
 import pandas as pd
 
@@ -20,7 +23,46 @@ from .. import utils as jwutils
 
 # list the filters used by the coronagraphs
 filters = {'TA': ['F560W', 'F1000W', 'F1500W', 'FND'],
-           'Sci': ['F1065C', 'F1140C', 'F1550C', 'F2300C']}
+           'Sci': {'1065': 'F1065C',
+                   '1140': 'F1140C',
+                   '1550': 'F1550C',
+                   'LYOT': 'F2300C'}
+           }
+
+def load_subarray_centers(centers_file, frame_from='det', frame_to='sci', pix_shift=0):
+    """
+    Load a list of the subarray centers and transform them to the frame you need
+
+    Parameters
+    ----------
+    centers_file : str or pathlib.Path
+      csv file of the centroids. First column is subarray, then x, dx, y, dy
+    frame_from : str
+      default: 'det']
+      the siaf coordinate frame that the center file values are in, e.g. 'det'
+    frame_to : str
+      default: 'sci'
+      the frame you want to transform the centers to
+    pix_shift : int
+      default: 0
+      add this amount to the pixel indices, e.g. for going between python and siaf
+
+    Output
+    ------
+    centers_df : pd.DataFrame of subarray centers. index is subarray, cols are x,y
+    """
+    centers = pd.read_csv(centers_file)
+    def conversion_wrapper(row):
+        """Wrapper for converting between any coordinate systems"""
+        funcname = f"{frame_from}_to_{frame_to}"
+        func = getattr(jwutils.miri_siaf['MIRIM_MASK'+row.name], funcname)
+        center = pd.Series(func(row['x'], row['y']), index=['x','y'])
+        return center
+    transf_centers = centers.set_index('subarray').apply(conversion_wrapper, axis=1)
+    # apply shift, if necessary
+    transf_centers = transf_centers + pix_shift
+    return transf_centers
+
 
 def generate_centroid_file_template(files, outfile):
     """
@@ -42,7 +84,7 @@ def generate_centroid_file_template(files, outfile):
     """
     centroids_file_template = jwread.organize_mast_files(files,
                                                          extra_keys={'FILTER': 0, 'SUBARRAY': 0})
-    drop_columns = "prog_id,vis_num,vis_grp,pll_seq,exp_num,seg_num,detector,prod_type,filestem"
+    drop_columns = "vis_num,vis_grp,pll_seq,exp_num,seg_num,detector,prod_type,filestem"
     centroids_file_template.drop(columns=drop_columns.split(','), inplace=True)
     for col in ['x','dx','y','dy']:
         centroids_file_template[col] = ''
@@ -100,7 +142,7 @@ def load_psf_centroid_file(filepath):
     """
     centroids_df = pd.read_csv(filepath)
     # mark the science filters as the references
-    is_ref = lambda filt: 'y' if filt in filters['Sci'] else 'n'
+    is_ref = lambda filt: 'y' if filt in filters['Sci'].values() else 'n'
     centroids_df['reference'] = centroids_df['filter'].apply(is_ref)
     # get the nearest TA ROI region
     get_roi = lambda row: determine_ta_region(*row[['x','y']],
@@ -129,7 +171,8 @@ def compute_filter_offsets(centroids_df):
       non-reference filters. Also contains all columns of the original dataframe
 
     """
-    gb = centroids_df.groupby("obs_num")
+    # make sure you're only including observations taken in the same program in the same sequence
+    gb = centroids_df.groupby(["prog_id", "obs_num"])
     # compute offsets and uncertainties
     def relative_position(group):
         ref_pos =  group.query("reference == 'y'").squeeze()[['x','y', 'dx', 'dy']]
@@ -180,7 +223,8 @@ def fit_offsets_v_position(offsets_df):
 def compute_offset_at_center(offsets_df, lines_df, centers_df):
     """
     For a given subarray and filter pair, use the line fitted to that data to
-    predict the boresight offset in the center of the subarray
+    predict the boresight offset in the center of the subarray. Prints the
+    offsets for each filter in each subarray
 
     Parameters
     ----------
@@ -198,10 +242,46 @@ def compute_offset_at_center(offsets_df, lines_df, centers_df):
 
     """
 
-    center_offsets_df = {}
+    center_offsets_df = pd.DataFrame(np.nan, columns=['dx', 'dy'], index=lines_df.index)
     for subarray, filt in lines_df.index:
         line = lines_df.loc[(subarray, filt)]
         x_center = line['off_x'][0] + line['off_x'][1]*centers_df.loc[subarray[-4:], 'x']
         y_center = line['off_y'][0] + line['off_y'][1]*centers_df.loc[subarray[-4:], 'y']
-        center_offsets_df[(subarray, filt)] = pd.Series({'x': x_center, 'y': y_center})
-    return pd.concat(center_offsets_df, axis=1).T
+        center_offsets_df.loc[(subarray, filt)] = pd.Series({'dx': x_center, 'dy': y_center})
+
+        # center_offsets_df = pd.concat(center_offsets_df, axis=1).T
+    # print the values
+    subarray_gb = center_offsets_df.groupby("subarray")
+    for subarray, group in subarray_gb:
+        print(f"{subarray[-4:]} boresight offsets (relative to {filters['Sci'][subarray[-4:]]})")
+        for ind in group.index:
+            row = group.loc[ind]
+            print(f"\t{row.name[1]:6s}: x, y = ({row['dx']:0.3f}, {row['dy']:0.3f})")
+
+    return center_offsets_df
+    
+
+def write_offset_to_file(center_offsets, saveto):
+    """
+    Write the boresight offsets at the array centers to a CSV file, after
+    adding/changing necessary information
+
+    Parameters
+    ----------
+    center_offsets: pd.DataFrame
+      dataframe of x, y offsets in pixels at the subarray centers, with
+      a two-level index of (subarray, filter)
+    saveto: str or pathlib.Path
+      where to save the CSV file
+
+    Output
+    ------
+    writes csv file to location specified by `saveto`
+
+    """
+    # move the index into columns
+    df = center_offsets.reset_index()
+    # add the subarray filter
+    ref_filter = df['subarray'].apply(lambda el: filters['Sci'][el[-4:]])
+    df.insert(1, 'ref. filter', ref_filter)
+    df.to_csv(saveto, index=False)
