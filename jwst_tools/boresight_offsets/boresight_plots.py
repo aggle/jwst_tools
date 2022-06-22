@@ -60,32 +60,113 @@ def confirm_psf_centroids(centroids_df, saveto=None):
             ax.errorbar(row['x'], row['y'],
                         xerr=row['dx'], yerr=row['dy'],
                         marker='x', color='k', ms=10)
-            
+
     if saveto is not None:
        fig.savefig(saveto, dpi=150)
     return fig
 
 
-def plot_centroids_v_position(offsets_df):
+def plot_centroids_v_position_2d(offsets_df, saveto=None):
     """
-    Docstring goes here
+    Plot the x and y offsets 
 
     Parameters
     ----------
-    any other parameters?
-    ax : plt.axis [None]
-      optional: provide the axis to draw on
+    offsets_df: pd.DataFrame
+      column of offsets from the reference filter, along with metadata
+      like subarray, filter, x and y position
+    saveto [None]: str or pathlib.Path
+      if not None, save figure to this path
 
     Output
     ------
-    fig : plt.Figure instance
-      if ax is given, returns a reference to the parent figure
+    fig [None]: plt.Figure instance
     """
-    if ax == None:
-      fig, ax = plt.subplots(1, 1)
-    else:
-      fig = ax.get_figure()
+    subarrays = offsets_df['subarray'].unique()
+    ncols = len(subarrays)
+    nrows = 1
+    fig, axes = plt.subplots(nrows=nrows, ncols=ncols,
+                             figsize=(6*ncols, 6*nrows),
+                             sharex=True, sharey=True,
+                             squeeze=False)
 
-    ## insert body here ##
+    for subarray, ax in zip(subarrays, axes.ravel()):
+        ax.set_title(subarray, size='x-large')
+        ax.set_xlabel("x offset [pix]")
+        ax.set_ylabel("y offset [pix]")
+        ax.errorbar(0, 0, marker='*', ms=20, label='reference position')
+        # plot each filter in a different color
+        gb =  offsets_df.query(f"reference == 'n' and subarray == '{subarray}'").groupby('filter')
+        for filt in gb.groups:
+            group = gb.get_group(filt)
+            ax.errorbar(group['off_x'], group['off_y'],
+                        xerr=group['off_dx'], yerr=group['off_dy'],
+                        ls='-', marker='o', label=f"{filt}")
+        
+        ax.legend(ncol=1, loc='center left')
+        ax.grid(True, alpha=1)
 
+    if saveto is not None:
+       fig.savefig(saveto, dpi=150)
     return fig
+
+
+def plot_centroids_v_position_1d(offsets_df, saveto=None, lines=None, centers=None):
+    """
+    Plot the offset against the position on the detector, x and y
+
+    Parameters
+    ----------
+    offsets_df : pd.DataFrame
+      dataframe of offsets from the reference filter, and also metadata like
+      subarray and filter
+    saveto [None] : str or pathlib.Path
+      where to save the figure. If None, not saved.
+    lines [None] : None or pd.DataFrame
+      a dataframe of line fit parameters (y = p[0] + p[1]*x). if None, skip.
+    centers [None] : dataframe or dict
+      dataframe or dict of (x, y) coronagraph centers. if None, skip.
+
+
+    Output
+    ------
+    fig: matplotlib Figure (and saves to disk if desired)
+
+    """
+
+    subarrays = offsets_df['subarray'].unique()
+    ncols = len(subarrays)
+    nrows = 2
+
+    fig, axes = plt.subplots(nrows=nrows, ncols=ncols,
+                             figsize=(8*ncols, 8*nrows),
+                             sharex='row', sharey='row',
+                             squeeze=False)
+
+    for coord, ax_row in zip(['x', 'y'], [0, 1]):
+        for subarray, ax in zip(subarrays, axes[ax_row]):
+            # descriptions
+            ax.set_title(subarray, size='x-large')
+            ax.set_xlabel(f"{coord} [pix]")
+            ax.set_ylabel(f"{coord} offset [pix]")
+            # plot a line at 0 offset
+            ax.axhline(0, ls='--', color='k', label='No offset')
+            # plot each filter in a different color
+            subset = offsets_df.query(f"reference == 'n' and subarray == '{subarray}'")
+            gb = subset.groupby('filter')
+            for filt in gb.groups:
+                group = gb.get_group(filt)
+                errorbar = ax.errorbar(group[f'{coord}'], group[f'off_{coord}'],
+                                       xerr=group[f'd{coord}'], yerr=group[f'off_d{coord}'],
+                                       ls='', marker='o', 
+                                       label=f"{filt} - F{subarray}C")
+                color = errorbar.get_children()[0].get_color()
+
+            # dummy plots, for the legend
+            ax.legend(ncol=2, loc='best', framealpha=0.2)
+            ax.grid(True, alpha=1)
+
+    if saveto is not None:
+       fig.savefig(saveto, dpi=150)
+    return fig
+
