@@ -4,8 +4,8 @@ Utilities for reading, writing, and parsing files and lists of files
 
 from io import StringIO
 from pathlib import Path
-import pandas as pd
 import re
+import pandas as pd
 
 from astropy.io import fits
 
@@ -228,7 +228,8 @@ def organize_mast_files(files: list, extra_keys: dict[str, int] = {}):
     data_organizer.rename(columns={'index': 'id'}, inplace=True)
     # add any extra keyword values
     for key, hdr in extra_keys.items():
-        data_organizer[key.lower()] = data_organizer.apply(lambda row: fits.getval(Path(row['path']) / row['filename'], key.upper(), hdr), axis=1)
+        getkey = lambda row: fits.getval(Path(row['path']) / row['filename'], key.upper(), hdr)
+        data_organizer[key.lower()] = data_organizer.apply(getkey, axis=1)
         pass
     return data_organizer
 
