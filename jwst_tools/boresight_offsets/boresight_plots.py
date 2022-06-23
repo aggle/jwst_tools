@@ -7,9 +7,67 @@ import numpy as np
 from astropy.io import fits
 
 # local to jwst_tools
-from .. import plot_utils as jwplots
 from .. import utils as jwutils
 from . import boresight_offsets as bso
+
+
+def get_vlims(img, llim_std=2, ulim_std=2):
+    """
+    Returns a tuple of (vmin, vmax). llim_std and ulim_std are integers that get
+    multiplied by the image std, and centered on the image median.
+    """
+    return np.nanmedian(img) + np.nanstd(img) * np.array([llim_std, ulim_std])
+
+
+def img_cutout(img, center, dims, return_ind=False):
+    """
+    Make a cutout of an image centered at `center` with size length `dims`
+
+    Parameters
+    ----------
+    img: 2-D numpy array in row, col order
+    center: tuple of (row, col) center of box. If float, gets `np.floor`'ed. 
+    dims: tuple or integer of the box side length. Should be odd.
+    return_ind [False]: if True, return indices to plot with plt.pcolor
+
+    Output
+    ------
+    cutout: 2-D numpy array of the cutout
+    ind: tuple of row, col 1-D index arrays for pcolor (from corner to corner)
+    """
+    row_max, col_max = img.shape
+    # center = [np.floor(c).astype(int) for c in center]
+    if np.ndim(dims) == 0:
+        dims = np.tile(dims, 2)
+    dims = np.array(dims).astype(int)
+    box_rad = np.array(dims)/2
+    # row and column limit math - make sure it doesn't go out of bounds
+    row_lims = [np.max((center[0] - box_rad[0], 0)),      # row llim
+                np.min((center[0] + box_rad[0], row_max)) # row ulim
+                ]
+    col_lims = [np.max((center[1] - box_rad[1], 0)),       # col llim
+                np.min((center[1] + box_rad[1], col_max))  # col ulim
+                ]
+    # correct row and column limit format.
+    # Use `floor` because that will index the correct pixel
+    row_lims = [np.floor(row_lims[0]).astype(int),
+                np.floor(row_lims[1]).astype(int),
+                ]
+    col_lims = [np.floor(col_lims[0]).astype(int),
+                np.floor(col_lims[1]).astype(int),
+                ]
+    # now you can index the image
+    cutout = img[row_lims[0]:row_lims[1], col_lims[0]:col_lims[1]]
+    try:
+        assert(all(cutout.shape == dims))
+    except AssertionError:
+        print(f"Error: cutout shape {cutout.shape} does not match requested {dims}")
+    if return_ind == True:
+        ind = [np.linspace(row_lims[0], row_lims[1], row_lims[1]-row_lims[0] + 1),
+               np.linspace(col_lims[0], col_lims[1], col_lims[1]-col_lims[0] + 1)]
+        return cutout, ind
+    return cutout
+
 
 
 def confirm_psf_centroids(centroids_df, saveto=None):
@@ -50,12 +108,12 @@ def confirm_psf_centroids(centroids_df, saveto=None):
             ax.set_title(f"{name[0]}, Obs {name[1]}")
             # get the stamp
             filename = Path(row['path']) / row['filename']
-            img, coords = jwplots.img_cutout(fits.getdata(filename, 1), 
-                                                row[['y', 'x']],
-                                                31, 
-                                                True)
+            img, coords = img_cutout(fits.getdata(filename, 1), 
+                                     row[['y', 'x']],
+                                     31, 
+                                     True)
             coords = [c-0.5 for c in coords]
-            vmin, vmax = jwplots.get_vlims(img, -1, 3)
+            vmin, vmax = get_vlims(img, -1, 3)
 
 
             ax.pcolor(coords[1], coords[0], img, vmin=vmin, vmax=vmax)

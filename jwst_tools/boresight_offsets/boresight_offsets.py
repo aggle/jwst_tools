@@ -18,7 +18,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from .. import read as jwread
+from . import read 
 from .. import utils as jwutils
 
 # list the filters used by the coronagraphs
@@ -82,10 +82,17 @@ def generate_centroid_file_template(files, outfile):
     writes csv file to indicated path
 
     """
-    centroids_file_template = jwread.organize_mast_files(files,
-                                                         extra_keys={'FILTER': 0, 'SUBARRAY': 0})
+    centroids_file_template = read.organize_mast_files(files,
+                                                       extra_keys={'FILTER': 0, 'SUBARRAY': 0})
+    # keep: id,,path,filename,filter,prog_id,subarray,obs_num,act_num,reference,x,dx,y,dy,roi
     drop_columns = "vis_num,vis_grp,pll_seq,exp_num,seg_num,detector,prod_type,filestem"
-    centroids_file_template.drop(columns=drop_columns.split(','), inplace=True)
+    for dc in drop_columns:
+        try:
+            centroids_file_template.drop(columns=[dc], inplace=True)
+        except KeyError:
+            # the column wasn't found, so don't worry about dropping it
+            pass
+    # centroids_file_template.drop(columns=drop_columns.split(','), inplace=True)
     for col in ['x','dx','y','dy']:
         centroids_file_template[col] = ''
     centroids_file_template.to_csv(str(outfile), index=False)
@@ -148,6 +155,13 @@ def load_psf_centroid_file(filepath):
     get_roi = lambda row: determine_ta_region(*row[['x','y']],
                                               jwutils.miri_siaf['MIRIM_'+row['subarray']])
     centroids_df['roi'] = centroids_df.apply(get_roi, axis=1)
+    # check that at least these columns are present
+    for col in ["id","path","filename","filter","prog_id","subarray",
+                "obs_num","act_num","reference","x","dx","y","dy","roi"]:
+        try:
+            assert(col in centroids_df.columns)
+        except AssertionError:
+            print(f"Column `{col}` missing from columns")
     return centroids_df
 
 
