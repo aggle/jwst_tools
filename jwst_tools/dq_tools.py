@@ -6,8 +6,8 @@ from matplotlib import pyplot as plt
 import numpy as np
 
 
-from pysiaf import Siaf
 from jwst.datamodels import dqflags
+
 
 def separate_dq_flags(dq_img):
     """
@@ -46,3 +46,33 @@ def plot_dq_flags(flag_dict):
     for ax in axes.ravel()[len(flag_dict):]:
         ax.set_visible(False)
     return fig
+
+
+def get_dq_img(filename):
+    """
+    Pull the DQ image from a fits file
+
+    Parameters
+    ----------
+    filename : str
+      valid path to the file
+
+    Output
+    ------
+    dq_img : np.array
+      the DQ image. Flags can be parsed with `separate_dq_flags(dq_img)`
+
+    """
+    dq_img = fits.getdata(str(filename), extname='DQ')
+    return dq_img
+
+
+def usage():
+    usage_str = """Usage:
+    - To get a DQ image, use `dq_img = get_dq_img(path/to/fits/file.fits)`. This is just a wrapper for fits.getdata(file, extname='DQ')
+    - To get a dictionary of flagged pixels, where the keys are the flags, use `dq_dictionary = separate_dq_flags(dq image)`
+    - To plot the positions of the flagged pixels, separated by flag, use `plot_dq_flags(dq_dictionary)`
+    Each uses the output of the previous.
+    """
+    usage_str = usage_str.replace("\t","")
+    print(usage_str)
