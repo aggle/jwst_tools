@@ -68,11 +68,14 @@ def get_dq_img(filename):
 
 
 def usage():
-    usage_str = """Usage:
-    - To get a DQ image, use `dq_img = get_dq_img(path/to/fits/file.fits)`. This is just a wrapper for fits.getdata(file, extname='DQ')
-    - To get a dictionary of flagged pixels, where the keys are the flags, use `dq_dictionary = separate_dq_flags(dq image)`
-    - To plot the positions of the flagged pixels, separated by flag, use `plot_dq_flags(dq_dictionary)`
+    """Usage:
+    - To get a DQ image, use `dq_img = get_dq_img(path/to/fits/file.fits)`.
+      This is just a wrapper for fits.getdata(file, extname='DQ')
+    - To get a dictionary of flagged pixels, where the keys are the flags, use
+      `dq_dictionary = separate_dq_flags(dq image)`
+    - To plot the positions of the flagged pixels, separated by flag, use
+      `plot_dq_flags(dq_dictionary)`
     Each uses the output of the previous.
     """
-    usage_str = usage_str.replace("\t","")
+    usage_str = usage.__doc__.replace("\t","")
     print(usage_str)
