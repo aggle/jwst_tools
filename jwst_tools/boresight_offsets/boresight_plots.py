@@ -6,8 +6,7 @@ import numpy as np
 
 from astropy.io import fits
 
-# local to jwst_tools
-from .. import utils as jwutils
+# local imports
 from . import boresight_offsets as bso
 
 
@@ -72,7 +71,9 @@ def img_cutout(img, center, dims, return_ind=False):
 
 def confirm_psf_centroids(centroids_df, saveto=None):
     """
-    Plot the centroids on top of cutouts of the psfs
+    Plot the centroids on top of cutouts of the psfs.
+    The figure will be ncols x nrows, where ncols is 5 (1 + # of TA filters)
+    and nrows is the number of observations
 
     Parameters
     ----------
@@ -127,7 +128,8 @@ def confirm_psf_centroids(centroids_df, saveto=None):
     return fig
 
 
-def plot_centroids_v_position_2d(offsets_df, saveto=None):
+def plot_centroids_v_position_2d(offsets_df, saveto=None,
+                                 cdp_offsets=None):
     """
     Plot the x and y offsets 
 
@@ -138,6 +140,9 @@ def plot_centroids_v_position_2d(offsets_df, saveto=None):
       like subarray, filter, x and y position
     saveto [None]: str or pathlib.Path
       if not None, save figure to this path
+    cdp_offsets [None]: dataframe or dict
+      The current CDP boresight offsets between filters. For format, see output
+      of boresight_offsets.load_cdp_offsets()
 
     Output
     ------
@@ -150,22 +155,38 @@ def plot_centroids_v_position_2d(offsets_df, saveto=None):
                              figsize=(6*ncols, 6*nrows),
                              sharex=True, sharey=True,
                              squeeze=False)
+    # plot parameter dicts, for consistency
+    ref_params = dict(marker='*', ms=20)
+    offset_params = dict(ls='-', marker='o')
+    cdp_params = dict(marker='+', s=100)
 
     for subarray, ax in zip(subarrays, axes.ravel()):
+        coron_filter = bso.filters['Sci'][subarray]
+        aper = bso.miri['MIRIM_'+subarray]
         ax.set_title(subarray, size='x-large')
         ax.set_xlabel("x offset [pix]")
         ax.set_ylabel("y offset [pix]")
-        ax.errorbar(0, 0, marker='*', ms=20, label='reference position')
+        ax.errorbar(0, 0, **ref_params, label=f"{bso.filters['Sci'][subarray]} (ref.)")
         # plot each filter in a different color
         gb =  offsets_df.query(f"reference == 'n' and subarray == '{subarray}'").groupby('filter')
         for filt in gb.groups:
             group = gb.get_group(filt)
-            ax.errorbar(group['off_x'], group['off_y'],
-                        xerr=group['off_dx'], yerr=group['off_dy'],
-                        ls='-', marker='o', label=f"{filt}")
+            line = ax.errorbar(group['off_x'], group['off_y'],
+                               xerr=group['off_dx'], yerr=group['off_dy'],
+                               **offset_params, label=f"{filt}")
+            color = line[0].get_color()
         
+            if cdp_offsets is not None:
+                cdp_offset = cdp_offsets.loc[(coron_filter, filt)]
+                ax.scatter(*cdp_offset[['dx', 'dy']], color=color, **cdp_params)
+        if cdp_offsets is not None:
+            ax.scatter([], [], **cdp_params, color='k', label='CDP offset')
+        add_arcsec_axes(ax, aper, which='both')
+
         ax.legend(ncol=1, loc='best')
         ax.grid(True, alpha=1)
+
+    fig.tight_layout()
 
     if saveto is not None:
        fig.savefig(saveto, dpi=150)
@@ -175,7 +196,8 @@ def plot_centroids_v_position_2d(offsets_df, saveto=None):
 def plot_centroids_v_position_1d(offsets_df, saveto=None,
                                  lines=None,
                                  center_offsets=None,
-                                 subarray_centers=None):
+                                 subarray_centers=None,
+                                 cdp_offsets=None):
     """
     Plot the offset against the position on the detector, x and y
 
@@ -188,8 +210,14 @@ def plot_centroids_v_position_1d(offsets_df, saveto=None,
       where to save the figure. If None, not saved.
     lines [None] : None or pd.DataFrame
       a dataframe of line fit parameters (y = p[0] + p[1]*x). if None, skip.
-    centers [None] : dataframe or dict
-      dataframe or dict of (x, y) coronagraph centers. if None, skip.
+    center_offsets [None] : dataframe or dict
+      dataframe or dict of (x, y) of the offsets at the coronagraph centers. I
+      f None, skip.
+    subarray_centers [None]: dataframe or dict
+      the centers (to the best of our knowledge) of the subarrays. If None, skip
+    cdp_offsets [None]: dataframe or dict
+      The current CDP boresight offsets between filters. For format, see output
+      of boresight_offsets.load_cdp_offsets()
 
 
     Output
@@ -207,9 +235,15 @@ def plot_centroids_v_position_1d(offsets_df, saveto=None,
                              sharex='row', sharey='row',
                              squeeze=False)
 
+    # plot parameter dicts, for consistency
+    offset_params = dict(ls='', marker='o')
+    line_params = dict(ls='--')
+    center_params = dict(marker='x', s=100)
+    cdp_params = dict(ls='-.')
+
     for coord, ax_row in zip(['x', 'y'], [0, 1]):
         for subarray, ax in zip(subarrays, axes[ax_row]):
-            aper = jwutils.miri_siaf['MIRIM_'+subarray]
+            aper = bso.miri['MIRIM_'+subarray]
             # descriptions
             ax.set_title(subarray, size='x-large')
             ax.set_xlabel(f"{coord} [pix]")
@@ -217,7 +251,7 @@ def plot_centroids_v_position_1d(offsets_df, saveto=None,
             # plot a line at 0 offset
             ax.axhline(0, ls='-', color='k', label='No offset')
 
-            coron_filter = bso.filters['Sci'][subarray[-4:]]
+            coron_filter = bso.filters['Sci'][subarray]
             # plot each filter in a different color
             subset = offsets_df.query(f"reference == 'n' and subarray == '{subarray}'")
             gb = subset.groupby('filter')
@@ -225,31 +259,115 @@ def plot_centroids_v_position_1d(offsets_df, saveto=None,
                 group = gb.get_group(filt)
                 errorbar = ax.errorbar(group[f'{coord}'], group[f'off_{coord}'],
                                        xerr=group[f'd{coord}'], yerr=group[f'off_d{coord}'],
-                                       ls='', marker='o', 
+                                       **offset_params,
                                        label=f"{filt} - {coron_filter}")
                 color = errorbar.get_children()[0].get_color()
                 if lines is not None:
+                    # plot a line across the length of the subarray
                     line = lines.loc[(subarray, filt), 'off_'+coord]
-                    line_x = np.array([0, aper.XSciSize]) #np.array([group[coord].max(), group[coord].min()])
-                    dx = line_x[1]-line_x[0]
-                    # stretch the line by 10% past the ends
-                    line_x = np.array(line_x) + 0.10*dx*np.array([-1, 1])
+                    line_x = np.array([0, aper.XSciSize])
                     line_y = line[0] + line[1]*line_x
-                    ax.plot(line_x, line_y, ls='-.', color=color)
+                    ax.plot(line_x, line_y, **line_params, color=color)
                 if center_offsets is not None:
                     center_offset = center_offsets.loc[(subarray, filt)]
-                    subarray_center = subarray_centers.loc[subarray[-4:]]
-                    ax.scatter(subarray_center[coord], center_offset['d'+coord], marker='x', color=color)
-
+                    subarray_center = subarray_centers.loc[subarray]
+                    ax.scatter(subarray_center[coord], center_offset['d'+coord],
+                               **center_params,
+                               color=color)
+                if cdp_offsets is not None:
+                    cdp_offset = cdp_offsets.loc[(coron_filter, filt), 'd'+coord]
+                    ax.axhline(cdp_offset, color=color, **cdp_params)
+            add_arcsec_axes(ax, aper, which='y')
             # dummy plots, for the legend
             if lines is not None:
-                ax.plot([], [], color='k', ls='-.', label='linear fit')
+                ax.plot([], [], color='k', **line_params, label='linear fit')
             if center_offsets is not None:
-                ax.scatter([], [], color='k', marker='x', label='center offset')
+                ax.scatter([], [], color='k', **center_params, label='pred. offset at center')
+            if cdp_offsets is not None:
+                ax.plot([], [], color='k', **cdp_params, label='CDP offset')
             ax.legend(ncol=2, loc='best', framealpha=0.2)
             ax.grid(True, alpha=1)
+
+    fig.tight_layout()
 
     if saveto is not None:
        fig.savefig(saveto, dpi=150)
     return fig
 
+def chain_vectors(vectors, init=np.array([0, 0])):
+    """
+    Make new vectors, one starting where the other ends
+
+    Parameters
+    ----------
+    vectors: list of tuples that represent (x,y) vector magnitudes
+    init: the starting position for the tail of the first vector
+
+    Output
+    ------
+    vector_chain : a dictionary of 2 2-D arrays of (start, length) for vectors
+      where each subsequent vector stars where the previous one stops
+    """
+    # 's' for start, 'l' for length
+    vector_chain = {-1: {'s': init, 'l': np.array([0, 0], dtype=float)}}
+    for i, v in enumerate(vectors):
+        start = vector_chain[i-1]['s']+vector_chain[i-1]['l']
+        vector_chain[i] = {'s': start, 'l': v.astype(float)}
+    vector_chain.pop(-1)
+    return vector_chain
+
+"""
+Plots for having secondary axes in pixels and arcsec
+the scale is aper.XSciScale or aper.YSciScale, whichever axis is appropriate.
+These can be used on either the x or y axes
+"""
+def add_arcsec_axes(axis, aper, which: str ='both'):
+    """
+    Use this function to add secondary axes in arcsec. Passing a SIAF aperture will get the pixel scale
+
+    Parameters
+    ----------
+    axis: axis to add the axes to
+    aper: pysiaf.Siaf aperture object
+    which: str
+      default: 'both' ()
+      which axis to plot arcsec on? options are 'both', 'x', or 'y'
+
+    Output
+    ------
+    none, modifies axis in-place
+    """
+    # first, disable the top and right ticks, in case they are enabled
+    axis.tick_params(axis='both', top=False, right=False)
+
+    # define the conversion functions
+    x_pix2arcsec = lambda x: x * aper.XSciScale * 1e3
+    x_arcsec2pix = lambda x: x / aper.XSciScale / 1e3
+    y_pix2arcsec = lambda y: y * aper.YSciScale * 1e3
+    y_arcsec2pix = lambda y: y / aper.YSciScale / 1e3
+
+    if which in ['both', 'x']:
+        x_secax = axis.secondary_xaxis('top', functions=(x_pix2arcsec, x_arcsec2pix))
+        x_secax.set_xlabel("mas")
+    if which in ['both', 'y']:
+        y_secax = axis.secondary_yaxis('right', functions=(y_pix2arcsec, y_arcsec2pix))
+        y_secax.set_ylabel("mas")
+
+
+def get_pix_arcsec_funcs(pixscale):
+    """
+    When you want to make a secondary axis, provide the pixel scale and this
+    will return two functions, one to go from pix to arcsec and the other to
+    go from arcsec to pix
+
+    Parameters
+    ----------
+    pixscale : float
+      arcsec per pixel
+
+    Output
+    ------
+    functions: tuple of functions: (pix2arcsec, arcsec2pix)
+
+    """
+    pass
