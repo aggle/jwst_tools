@@ -53,6 +53,8 @@ def print_usage():
     """
     print(help_string)
 
+# alias
+help = print_usage
 """
 How does the file manager work?
 Example:
@@ -166,7 +168,7 @@ def run_stage2b(row, params):
         stage_manager[k] = v
     return stage_manager
 
-def run_stage3(asn_file, params):
+def run_stage3(asn_file, params={}):
     """
     Run pipeline stage 3 (calints -> psf-subtracted product) with the given
     parameters
@@ -175,7 +177,7 @@ def run_stage3(asn_file, params):
     ----------
     asn_file: string or pathlib.Path to file
       association file as defined in https://jwst-docs.stsci.edu/understanding-jwst-data-files/jwst-data-associations
-    params: dict
+    params [{}]: dict
       stage 3 parameters
 
     Output
@@ -195,7 +197,7 @@ default_params = {'2a': {'save_results': True},
                   '2b': {'save_results': True},
                   '3' : {'save_results': True}}
 def run_pipeline(input_files: list, input_stage: str, stages_to_run: list,
-                 output_folder: str = '.', params: dict = {}):
+                 output_folder: str = '.', stage_params: dict = {}):
     """
     Organize and manage running the requested pipeline stages
 
@@ -210,9 +212,11 @@ def run_pipeline(input_files: list, input_stage: str, stages_to_run: list,
       If Stage 3 is chosen, params must contain an association file
     output_folder: string or pathlib.Path ["."]
       Folder in which to store the pipeline output
-    params: dictionary [{}]
+    stage_params: dictionary [{}]
       Dictionary of stage parameters. Includes reference file overrides.
       Format is {'2a': {'step_name': {'arg': val pairs}} for e.g. stage 2a
+      If running stage 3, make sure to pass an association file with the key
+      'asn_file'
 
     Output
     ------
@@ -227,10 +231,14 @@ def run_pipeline(input_files: list, input_stage: str, stages_to_run: list,
     print(f"Running pipeline version {PIPELINE_VERSION}", file=logfile)
 
     # set default values without overriding, and output directory
+    params = {'2a': {}, '2b': {}, '3': {}}
     for k1 in params.keys():
         for k2, v2 in default_params[k1].items():
             params[k1].setdefault(k2, v2)
             params[k1]['output_dir'] = output_folder
+    # copy over user input parameters
+    for k1 in stage_params.keys():
+        params[k1].update(stage_params[k1])
 
     run_manager = initialize_files(input_files, input_stage)
     # loop through stages and run them
@@ -244,7 +252,12 @@ def run_pipeline(input_files: list, input_stage: str, stages_to_run: list,
             results['id'] = results.index + len(run_manager)
             run_manager = run_manager.append(results, ignore_index=True)
         elif stage_id == '3':
-            pass
+            try:
+                assert('asn_file' in params['3'].keys())
+            except AssertionError:
+                print("Stage 3 arguments to not contain association file ('asn_file'), skipping")
+                break
+            print("Stage 3 is best run by itself using run_stage3()")
         else:
             print(f"No such stage_id {stage_id} (in {stages_to_run})")
     return run_manager
