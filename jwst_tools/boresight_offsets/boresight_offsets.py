@@ -10,11 +10,18 @@ Steps for computing boresight offsets:
 6. [x] Use the line to compute the offset at the center (or at any other location in the subarray)
    a. [ ] Plot lines and centers to confirm
 7. [x] Write the central offset to a file and send it off to be included in SIAF
+<<<<<<< HEAD
 8. [x] Compare to the CDP boresights from miricoord
 9. [ ] Convert the offsets to arcsec taking into account distortion
 """
 
 # python
+=======
+8. [ ] Compare to the CDP boresights from miricoord
+9. [ ] Convert the offsets to arcsec taking into account distortion
+"""
+
+>>>>>>> 78bd53f (boresight offsets computations work great)
 from pathlib import Path
 import numpy as np
 import pandas as pd
@@ -39,11 +46,54 @@ subarrays = {'4QPM': ['1065','1140','1550'],
 
 # list the filters used by the coronagraphs
 filters = {'TA': ['F560W', 'F1000W', 'F1500W', 'FND'],
+<<<<<<< HEAD
            'Sci': {'MASK1065': 'F1065C',
                    'MASK1140': 'F1140C',
                    'MASK1550': 'F1550C',
                    'MASKLYOT': 'F2300C'}
            }
+=======
+           'Sci': {'1065': 'F1065C',
+                   '1140': 'F1140C',
+                   '1550': 'F1550C',
+                   'LYOT': 'F2300C'}
+           }
+
+def load_subarray_centers(centers_file, frame_from='det', frame_to='sci', pix_shift=0):
+    """
+    Load a list of the subarray centers and transform them to the frame you need
+
+    Parameters
+    ----------
+    centers_file : str or pathlib.Path
+      csv file of the centroids. First column is subarray, then x, dx, y, dy
+    frame_from : str
+      default: 'det']
+      the siaf coordinate frame that the center file values are in, e.g. 'det'
+    frame_to : str
+      default: 'sci'
+      the frame you want to transform the centers to
+    pix_shift : int
+      default: 0
+      add this amount to the pixel indices, e.g. for going between python and siaf
+
+    Output
+    ------
+    centers_df : pd.DataFrame of subarray centers. index is subarray, cols are x,y
+    """
+    centers = pd.read_csv(centers_file)
+    def conversion_wrapper(row):
+        """Wrapper for converting between any coordinate systems"""
+        funcname = f"{frame_from}_to_{frame_to}"
+        func = getattr(jwutils.miri_siaf['MIRIM_MASK'+row.name], funcname)
+        center = pd.Series(func(row['x'], row['y']), index=['x','y'])
+        return center
+    transf_centers = centers.set_index('subarray').apply(conversion_wrapper, axis=1)
+    # apply shift, if necessary
+    transf_centers = transf_centers + pix_shift
+    return transf_centers
+
+>>>>>>> 78bd53f (boresight offsets computations work great)
 
 def load_subarray_centers(centers_file, frame_from='det', frame_to='sci', pix_shift=0, csv_args={}):
     """
@@ -104,6 +154,7 @@ def generate_centroid_file_template(files, outfile, drop_columns=[]):
     writes csv file to indicated path
 
     """
+<<<<<<< HEAD
     centroids_file_template = read.organize_mast_files(files,
                                                        extra_keys={'FILTER': 0, 'SUBARRAY': 0})
     # keep: id,,path,filename,filter,prog_id,subarray,obs_num,act_num,reference,x,dx,y,dy,roi
@@ -115,6 +166,12 @@ def generate_centroid_file_template(files, outfile, drop_columns=[]):
             # the column wasn't found, so don't worry about dropping it
             pass
     # centroids_file_template.drop(columns=drop_columns.split(','), inplace=True)
+=======
+    centroids_file_template = jwread.organize_mast_files(files,
+                                                         extra_keys={'FILTER': 0, 'SUBARRAY': 0})
+    drop_columns = "vis_num,vis_grp,pll_seq,exp_num,seg_num,detector,prod_type,filestem"
+    centroids_file_template.drop(columns=drop_columns.split(','), inplace=True)
+>>>>>>> 78bd53f (boresight offsets computations work great)
     for col in ['x','dx','y','dy']:
         centroids_file_template[col] = ''
     centroids_file_template.to_csv(str(outfile), index=False)
@@ -285,6 +342,7 @@ def compute_offset_at_center(offsets_df, lines_df, centers_df, use_1140=False):
     center_offsets_df = pd.DataFrame(np.nan, columns=['dx', 'dy'], index=lines_df.index)
     for subarray, filt in lines_df.index:
         line = lines_df.loc[(subarray, filt)]
+<<<<<<< HEAD
         # Since we don't  have complete coverage of the 1065 and 1550 arrays
         # and the slope of the offsets as a function of position seems to
         # diverge near the center, we might want to use the 1140 slopes instead
@@ -318,6 +376,20 @@ def compute_offset_at_center(offsets_df, lines_df, centers_df, use_1140=False):
         for ind in group.index:
             row = group.loc[ind]
             print(f"\t{row.name[1]:6s}: x, y = ({row['dx']:+0.3f}, {row['dy']:+0.3f})")
+=======
+        x_center = line['off_x'][0] + line['off_x'][1]*centers_df.loc[subarray[-4:], 'x']
+        y_center = line['off_y'][0] + line['off_y'][1]*centers_df.loc[subarray[-4:], 'y']
+        center_offsets_df.loc[(subarray, filt)] = pd.Series({'dx': x_center, 'dy': y_center})
+
+        # center_offsets_df = pd.concat(center_offsets_df, axis=1).T
+    # print the values
+    subarray_gb = center_offsets_df.groupby("subarray")
+    for subarray, group in subarray_gb:
+        print(f"{subarray[-4:]} boresight offsets (relative to {filters['Sci'][subarray[-4:]]})")
+        for ind in group.index:
+            row = group.loc[ind]
+            print(f"\t{row.name[1]:6s}: x, y = ({row['dx']:0.3f}, {row['dy']:0.3f})")
+>>>>>>> 78bd53f (boresight offsets computations work great)
 
     return center_offsets_df
     
@@ -342,6 +414,7 @@ def write_offset_to_file(center_offsets, saveto):
     """
     # move the index into columns
     df = center_offsets.reset_index()
+<<<<<<< HEAD
     df.to_csv(saveto, index=False)
 
 def load_cdp_offsets():
@@ -453,3 +526,9 @@ def make_uncal_flat(filename, outfile, make_ta_image):
     hdulist = fits.HDUList([pri_hdu, sci_hdu])
     hdulist.writeto(str(new_filename))
     print(new_filename, "written")
+=======
+    # add the subarray filter
+    ref_filter = df['subarray'].apply(lambda el: filters['Sci'][el[-4:]])
+    df.insert(1, 'ref. filter', ref_filter)
+    df.to_csv(saveto, index=False)
+>>>>>>> 78bd53f (boresight offsets computations work great)

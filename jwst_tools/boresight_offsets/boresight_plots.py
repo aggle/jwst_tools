@@ -6,6 +6,7 @@ import numpy as np
 
 from astropy.io import fits
 
+<<<<<<< HEAD
 # local imports
 from . import boresight_offsets as bso
 
@@ -67,6 +68,12 @@ def img_cutout(img, center, dims, return_ind=False):
         return cutout, ind
     return cutout
 
+=======
+# local to jwst_tools
+from .. import plot_utils as jwplots
+from .. import utils as jwutils
+from . import boresight_offsets as bso
+>>>>>>> 78bd53f (boresight offsets computations work great)
 
 
 def confirm_psf_centroids(centroids_df, saveto=None):
@@ -109,12 +116,21 @@ def confirm_psf_centroids(centroids_df, saveto=None):
             ax.set_title(f"{name[0]}, Obs {name[1]}")
             # get the stamp
             filename = Path(row['path']) / row['filename']
+<<<<<<< HEAD
             img, coords = img_cutout(fits.getdata(filename, 1), 
                                      row[['y', 'x']],
                                      31, 
                                      True)
             coords = [c-0.5 for c in coords]
             vmin, vmax = get_vlims(img, -1, 3)
+=======
+            img, coords = jwplots.img_cutout(fits.getdata(filename, 1), 
+                                                row[['y', 'x']],
+                                                31, 
+                                                True)
+            coords = [c-0.5 for c in coords]
+            vmin, vmax = jwplots.get_vlims(img, -1, 3)
+>>>>>>> 78bd53f (boresight offsets computations work great)
 
 
             ax.pcolor(coords[1], coords[0], img, vmin=vmin, vmax=vmax)
@@ -176,6 +192,7 @@ def plot_centroids_v_position_2d(offsets_df, saveto=None,
                                **offset_params, label=f"{filt}")
             color = line[0].get_color()
         
+<<<<<<< HEAD
             if cdp_offsets is not None:
                 cdp_offset = cdp_offsets.loc[(coron_filter, filt)]
                 ax.scatter(*cdp_offset[['dx', 'dy']], color=color, **cdp_params)
@@ -183,6 +200,8 @@ def plot_centroids_v_position_2d(offsets_df, saveto=None,
             ax.scatter([], [], **cdp_params, color='k', label='CDP offset')
         add_arcsec_axes(ax, aper, which='both')
 
+=======
+>>>>>>> 78bd53f (boresight offsets computations work great)
         ax.legend(ncol=1, loc='best')
         ax.grid(True, alpha=1)
 
@@ -196,8 +215,12 @@ def plot_centroids_v_position_2d(offsets_df, saveto=None,
 def plot_centroids_v_position_1d(offsets_df, saveto=None,
                                  lines=None,
                                  center_offsets=None,
+<<<<<<< HEAD
                                  subarray_centers=None,
                                  cdp_offsets=None):
+=======
+                                 subarray_centers=None):
+>>>>>>> 78bd53f (boresight offsets computations work great)
     """
     Plot the offset against the position on the detector, x and y
 
@@ -243,7 +266,11 @@ def plot_centroids_v_position_1d(offsets_df, saveto=None,
 
     for coord, ax_row in zip(['x', 'y'], [0, 1]):
         for subarray, ax in zip(subarrays, axes[ax_row]):
+<<<<<<< HEAD
             aper = bso.miri['MIRIM_'+subarray]
+=======
+            aper = jwutils.miri_siaf['MIRIM_'+subarray]
+>>>>>>> 78bd53f (boresight offsets computations work great)
             # descriptions
             ax.set_title(subarray, size='x-large')
             ax.set_xlabel(f"{coord} [pix]")
@@ -251,7 +278,11 @@ def plot_centroids_v_position_1d(offsets_df, saveto=None,
             # plot a line at 0 offset
             ax.axhline(0, ls='-', color='k', label='No offset')
 
+<<<<<<< HEAD
             coron_filter = bso.filters['Sci'][subarray]
+=======
+            coron_filter = bso.filters['Sci'][subarray[-4:]]
+>>>>>>> 78bd53f (boresight offsets computations work great)
             # plot each filter in a different color
             subset = offsets_df.query(f"reference == 'n' and subarray == '{subarray}'")
             gb = subset.groupby('filter')
@@ -259,6 +290,7 @@ def plot_centroids_v_position_1d(offsets_df, saveto=None,
                 group = gb.get_group(filt)
                 errorbar = ax.errorbar(group[f'{coord}'], group[f'off_{coord}'],
                                        xerr=group[f'd{coord}'], yerr=group[f'off_d{coord}'],
+<<<<<<< HEAD
                                        **offset_params,
                                        label=f"{filt} - {coron_filter}")
                 color = errorbar.get_children()[0].get_color()
@@ -285,6 +317,29 @@ def plot_centroids_v_position_1d(offsets_df, saveto=None,
                 ax.scatter([], [], color='k', **center_params, label='pred. offset at center')
             if cdp_offsets is not None:
                 ax.plot([], [], color='k', **cdp_params, label='CDP offset')
+=======
+                                       ls='', marker='o', 
+                                       label=f"{filt} - {coron_filter}")
+                color = errorbar.get_children()[0].get_color()
+                if lines is not None:
+                    line = lines.loc[(subarray, filt), 'off_'+coord]
+                    line_x = np.array([0, aper.XSciSize]) #np.array([group[coord].max(), group[coord].min()])
+                    dx = line_x[1]-line_x[0]
+                    # stretch the line by 10% past the ends
+                    line_x = np.array(line_x) + 0.10*dx*np.array([-1, 1])
+                    line_y = line[0] + line[1]*line_x
+                    ax.plot(line_x, line_y, ls='-.', color=color)
+                if center_offsets is not None:
+                    center_offset = center_offsets.loc[(subarray, filt)]
+                    subarray_center = subarray_centers.loc[subarray[-4:]]
+                    ax.scatter(subarray_center[coord], center_offset['d'+coord], marker='x', color=color)
+
+            # dummy plots, for the legend
+            if lines is not None:
+                ax.plot([], [], color='k', ls='-.', label='linear fit')
+            if center_offsets is not None:
+                ax.scatter([], [], color='k', marker='x', label='center offset')
+>>>>>>> 78bd53f (boresight offsets computations work great)
             ax.legend(ncol=2, loc='best', framealpha=0.2)
             ax.grid(True, alpha=1)
 
