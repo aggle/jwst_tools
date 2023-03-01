@@ -191,22 +191,33 @@ def write_html(outfile, database):
 
 
 if __name__ == "__main__":
-    prog_ids = [
-        1194,
-        1241,
-        1277,
-        1282,
-        1386,
-        1413,
-        1618,
-        1668,
-        2243,
-        2538,
-        2153
-    ]
+    if sys.argv[1] == 'test':
+        prog_ids = [1194, 1282]
+        ofile = "/Users/jaguilar/Desktop/test.html"
+    else:
+        prog_ids = [
+            1194,
+            1241,
+            1277,
+            1282,
+            1386,
+            1413,
+            1618,
+            1668,
+            2243,
+            2538,
+            2153
+        ]
+        ofile = sys.argv[1]
+    print(f"Generating {ofile}")
     programs = get_program_table(prog_ids)
     try:
-        html_path = Path(sys.argv[1])
+        html_path = Path(ofile)
     except:
-        html_path = Path("~/test.html")
+        html_path = Path("/Users/jaguilar/Desktop/test.html")
     write_html(str(html_path), programs)
+    print("""Upload it to the "MIRI Coronagraphy Dump" folder:
+    \t https://stsci.app.box.com/folder/196944163759
+    and copy-paste the HTML into the HTML box on the Scheduling page:
+    \t https://innerspace.stsci.edu/display/JWST/Scheduling+table
+    """)
