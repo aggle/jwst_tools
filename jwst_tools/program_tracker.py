@@ -133,17 +133,16 @@ def body_end_template(table_keys=[]):
     if table_keys == []:
         pass
     else:
-        sort_lines = '\n'.join(f"$('#sortTable_{k}').DataTable();" for k in table_keys)
-        template = template.replace("$('#sortTable').DataTable();", sort_lines)
+        sort_lines = '\n'.join(f"$('#{k}').DataTable();" for k in table_keys)
+        template = template.replace("$('#table').DataTable();", sort_lines)
     return template
 
 
 # start the body, up to the table
-def table_start_template(columns, sort_key=''):
+def table_start_template(columns, table_name='table'):
     with open(template_path / "table_start_template.txt", 'r') as ff:
         template = ff.read()
-    if sort_key != '':
-        template = template.replace('id="sortTable"', f' id=sortTable_{sort_key}')
+    template = template.replace('id="{replace_with_table_name}"', f'id="{table_name}"')
     column_props = 'class="align-middle"'
     column_text = '\n'.join(f'<th {column_props}>{c}</th>' for c in columns)
     return template.replace("{replace_text_here_with_columns}", column_text)
@@ -177,15 +176,18 @@ def write_html(outfile, database):
         print("Generating the following tables:")
         print("\t", ", ".join(table_keys))
         # make a separate table for each kind of visit status
+        list_of_tables = []
         for key, group in tables_gb:
             group_dropna = group.dropna(how='all', axis=1)
             ff.write(f"<br><br>Status: {key.title()}<br>\n")
-            ff.write(table_start_template(group_dropna.columns, key))
+            table_name = f'table_{key}'
+            ff.write(table_start_template(group_dropna.columns, table_name))
+            list_of_tables.append(table_name)
             row_data = generate_table_rows(group_dropna)
             ff.write(row_data)
             ff.write(table_end_template())
 
-        ff.write(body_end_template(table_keys))
+        ff.write(body_end_template(list_of_tables))
 
 
 if __name__ == "__main__":
@@ -194,6 +196,7 @@ if __name__ == "__main__":
         1241,
         1277,
         1282,
+        1386,
         1413,
         1618,
         1668,
