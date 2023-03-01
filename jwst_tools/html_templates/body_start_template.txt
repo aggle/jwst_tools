@@ -1,0 +1,14 @@
+<body>
+<br>
+<br>
+<div class="container-fluid" style="width:96%";>
+<center>
+<h2 class="align-middle">MIRI Coronagraphy Programs</h2>
+<br>
+This table contains upcoming MIRI coronagraphic observations. Please use the search bar below to filter for a particular program.
+<br>
+This page is based on the TrExoLiSTS website by Nikolay Nikolov. Documentation: <a href="https://ui.adsabs.harvard.edu/abs/2022wfc..rept....9N/abstract">ISR</a>, <a href="https://iopscience.iop.org/article/10.3847/2515-5172/acabc7">RNAAS</a> and <a href="https://ui.adsabs.harvard.edu/abs/2022arXiv221207966N/abstract">arXiv</a>
+<br>
+Last update: {insert_date_here}
+</center>
+<br>

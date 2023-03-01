@@ -1,0 +1,7 @@
+<table style="margin-left:auto; margin-right:auto; text-align:center;" class="table table-striped table-bordered centerTable" id="sortTable">
+<thead>
+<tr>
+{replace_text_here_with_columns}
+</tr>
+</thead>
+<tbody>
