@@ -125,7 +125,11 @@ def parse_jwst_exposure_filename(filename):
     if parts[2].find('-') >= 0:
         fname_dict['seg_num'] = parts[2].split('-')[1][3:]
     fname_dict['detector'] = parts[3]
-    fname_dict['prod_type'] = parts[4]
+    
+    try:
+        fname_dict['prod_type'] = parts[4]
+    except IndexError:
+        fname_dict['prod_type'] = None
     return fname_dict
 
 def parse_jwst_filename_stage3(filename):
@@ -263,10 +267,6 @@ def organize_mast_files(files: list, extra_keys: dict[str, int] = {}):
         for k, v in vals.items():
             data_organizer.loc[row.name, k.lower()] = v
     data_organizer.apply(lambda row: getkeys(row, extra_keys), axis=1);
-    # for key, hdr in extra_keys.items():
-    #     getkey = lambda row: fits.getval(Path(row['path']) / row['filename'], key.upper(), hdr)
-    #     data_organizer[key.lower()] = data_organizer.apply(getkey, axis=1)
-    #     pass
     return data_organizer
 
 
@@ -307,3 +307,8 @@ def organize_files_by_header(files, ext=0):
     hdr_df = pd.concat(hdrs, axis=1).T
     return hdr_df
 
+def display_header(row):
+    """Convenience function to print a header"""
+    filename = Path(row['path']) / row['filename']
+    hdr = fits.getheader(filename)
+    return hdr

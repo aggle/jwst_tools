@@ -196,8 +196,11 @@ Pipeline wrapper
 default_params = {'2a': {'save_results': True},
                   '2b': {'save_results': True},
                   '3' : {'save_results': True}}
-def run_pipeline(input_files: list, input_stage: str, stages_to_run: list,
-                 output_folder: str = '.', stage_params: dict = {}):
+def run_pipeline(input_files: list,
+                 input_stage: str,
+                 stages_to_run: list,
+                 output_folder: str = '.',
+                 stage_params: dict = {}):
     """
     Organize and manage running the requested pipeline stages
 
@@ -215,7 +218,7 @@ def run_pipeline(input_files: list, input_stage: str, stages_to_run: list,
     stage_params: dictionary [{}]
       Dictionary of stage parameters. Includes reference file overrides.
       Format is {'2a': {'step_name': {'arg': val pairs}} for e.g. stage 2a
-      If running stage 3, make sure to pass an association file with the key
+      If running stage 3, make sure to include an association file with the key
       'asn_file'
 
     Output

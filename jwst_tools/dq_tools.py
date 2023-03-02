@@ -1,5 +1,15 @@
 """
 Tools for manipulating and parsing DQ images
+
+Usage:
+- To get a DQ image, use `dq_img = get_dq_img(path/to/fits/file.fits)`.
+  This is just a wrapper for fits.getdata(file, extname='DQ')
+- To get a dictionary of flagged pixels, where the keys are the flags, use
+  `dq_dictionary = separate_dq_flags(dq image)`.
+- To plot the positions of the flagged pixels, separated by flag, use
+  `plot_dq_flags(dq_dictionary)`
+Each uses the output of the previous.
+
 """
 import matplotlib as mpl
 from matplotlib import pyplot as plt
