@@ -1,0 +1,12 @@
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+</div>
+<script>
+$('#table').DataTable();
+</script>
+</body>
+</html>
