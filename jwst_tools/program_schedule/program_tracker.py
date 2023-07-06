@@ -1,9 +1,11 @@
 """Generate an html page that contains all the visit information"""
+# use conda environment ??
 
 import sys
 import re
 from pathlib import Path
-from datetime import date
+import time
+from datetime import datetime, date
 
 from requests.sessions import get_environ_proxies
 # from boresight_offsets.read import parse_jwst_filename_stage3
@@ -97,7 +99,7 @@ def prog2df(info, miri_only=True):
         # split the planWindow column into something sortable
         df = add_plan_windows_to_program_df(df)
     except ValueError:
-        print(f"{info['proposal_id']} failed")
+        print(f"{info['proposal_id']} failed, no information available")
         df = pd.DataFrame()
     return df
 
@@ -199,41 +201,98 @@ def write_html(outfile, database):
 
         ff.write(body_end_template(list_of_tables))
 
+def print_columns(items, ncols=4):
+    """Take a list of items to print and format them into columns
+
+    Parameters
+    ----------
+    list_of_items: list-like
+      stuff to print in columns
+    ncols : int
+      number of columns
+
+    Output
+    ------
+    prints the passed items in the given number of columns
+    """
+    col_width = max([len(i) for i in items])
+    items = [f"{j:{ncols}s}" for j in items]
+    nitems = len(items)
+    nrows = int(nitems/ncols + (nitems % ncols > 0))
+    lines = []
+    for r in range(nrows):
+        row_items = items[r*ncols:r*ncols+ncols]
+        lines.append(" ".join(row_items))
+    print("\n".join(lines))
+
+
+
+def get_next_month(program_table, time_window=60):
+    """
+    Get all the programs whose planning or execution windows are scheduled for within a month from today's date.
+
+    Parameters
+    ----------
+    program_table : pd.DataFrame
+      output of get_program_table()
+
+    Output
+    ------
+    Filtered list of observations that are executing in the given window
+
+    """
+    today = date.today()
+    def get_time_delta(jdate, time_window=time_window):
+        try:
+            start_time = time.strptime(str(jdate), "%Y.%j")
+        except:
+            return False
+        start_date = date(start_time.tm_year,
+                          start_time.tm_mon,
+                          start_time.tm_mday)
+        dtime = (start_date - today).days
+        in_window = True if dtime <= time_window else False
+        return in_window
+    program_table['in_next_month'] = program_table['planWindow-begin_dec'].apply(get_time_delta, time_window)
+    return program_table.query("in_next_month == True").copy()
+
 
 if __name__ == "__main__":
-    # if sys.argv[1] == 'test':
-    #     prog_ids = [1194, 1282]
-    #     ofile = "/Users/jaguilar/Desktop/test.html"
-    # else:
-    # prog_ids = [
-    #     1193,
-    #     1194,
-    #     1241,
-    #     1277,
-    #     1282,
-    #     1386,
-    #     1413,
-    #     1618,
-    #     1668,
-    #     2243,
-    #     2538,
-    #     2153
-    # ]
-    ifile = "./jwst_programs.txt"
-    with open(ifile, 'r') as f:
-        prog_ids = f.readlines()
+    if len(sys.argv) == 1:
+        ifile = "./jwst_programs.txt"
+        with open(ifile, 'r') as f:
+            prog_ids = [i.strip() for i in f.readlines()]
+    else:
+        prog_ids = sys.argv[1]
+        prog_ids = prog_ids.split(' ')
     #     ofile = sys.argv[1]
     ofile = "miri_coron_schedule.html"
     print(f"Generating {ofile} from the following {len(prog_ids)} programs:")
-    print("\n".join(prog_ids))
+    print_columns(prog_ids)
+    print("")
+
     programs = get_program_table(prog_ids)
     try:
         html_path = Path(ofile)
     except:
         html_path = Path("/Users/jaguilar/Desktop/test.html")
     write_html(str(html_path), programs)
-    print("""Upload it to the "MIRI Coronagraphy Dump" folder:
+    print(f"""Upload it to the "MIRI Coronagraphy Dump" folder:
     \t https://stsci.app.box.com/folder/196944163759
-    and copy-paste the HTML into the HTML box on the Scheduling page:
-    \t https://innerspace.stsci.edu/display/JWST/Scheduling+table
+    and copy-paste the HTML from {ofile} into the HTML box on the Scheduling page:
+    \t https://innerspace.stsci.edu/display/JWST/MIRI+Coronagraphy+Scheduling+Table
     """)
+
+    # print the programs that are happening in the next month
+    print("Copy and paste this section into your program status email:\n")
+    time_window=60
+    print(f"The following observations are planned to execute within the next {time_window} days:\n")
+    next_programs = get_next_month(programs)
+    next_programs['observation'] = next_programs['observation'].apply(int)
+    next_programs.sort_values(by=['planWindow-begin_dec', 'observation'],
+                              inplace=True)
+    for key, group in next_programs.groupby("status"):
+        print("Status: " + key)
+        print("-"*len("Status: " + key))
+        group.apply(lambda row: print(f"Prog {row['pid']} | Obs {row['observation']:3d} | Start: {row['planWindow-begin_cal']}"), axis=1);
+        print("\n")
