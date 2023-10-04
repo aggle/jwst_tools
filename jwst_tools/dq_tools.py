@@ -19,7 +19,7 @@ import numpy as np
 from jwst.datamodels import dqflags
 
 
-def separate_dq_flags(dq_img):
+def separate_dq_flags(dq_img, flags=None):
     """
     Separate a DQ image into a separate image for each DQ flag
 
@@ -27,6 +27,9 @@ def separate_dq_flags(dq_img):
     ----------
     dq_img: np.ndarray
       image (or cube) of DQ flags
+    flags: str or list
+      (optional) a list of flag names to check for, if you only want to check
+      for some flags. If None, checks for all flags
 
     Output
     ------
@@ -34,8 +37,15 @@ def separate_dq_flags(dq_img):
       a dictionary whose entries are {dq_flag : image/cube of pixels with this flag}
 
     """
+    # if requested, limit the flags checked
+    check_flags = list(dqflags.pixel.keys())
+    if flags is not None:
+        if isinstance(flags, str):
+            flags = [flags]
+        check_flags = flags
     dq_flags = {}
-    for flag, bad_bitvalue in dqflags.pixel.items():
+    for flag in check_flags:
+        bad_bitvalue = dqflags.pixel[flag]
         if flag == 'GOOD':  # comparison to '0' is a special case
             img = ~np.bitwise_or(dq_img, bad_bitvalue).astype(bool)
         else:
