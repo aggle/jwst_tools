@@ -16,24 +16,27 @@ from pysiaf import Siaf
 
 
 
-######################
-##### USER INPUT #####
-######################
+###############################
+########## USER INPUT #########
+###############################
+
 # Star positions - make sure to enter all values.
-# The "slew_from" variable stores the position of the star that is used for TA.
-# the "slew_to" variable stores the position of the final target of the observations
 # The coordinates should be given *at the time of observation*
+
+# The "slew_to" variable stores the position of the final target of the observations
 slew_to = SkyCoord( # A component
         272.8136285869 * units.deg, # RA
         69.2500743163 * units.deg,  # Dec
         frame='icrs',
     )
+# The "slew_from" variable stores the position of the star that is used for TA.
 slew_from = SkyCoord( # B component
-        272.812150608 * units.deg, 
-        69.2489835698 * units.deg,
+        272.812150608 * units.deg, # RA
+        69.2489835698 * units.deg, # Dec
         frame='icrs',
     )
 
+# Telescope V3PA
 # enter the PA angle of the *telescope* V3 axis, at the time of the observation
 v3 = 320.0 
 
@@ -44,13 +47,13 @@ coron_id = [
     '1550',
     # 'LYOT',
 ]
-######################
-### END USER INPUT ###
-######################
 
+###############################
+####### END USER INPUT ########
 ###############################
 # Script takes over from here #
 ###############################
+
 coron_id = coron_id[0]
 star_positions = {
     # the TA star
