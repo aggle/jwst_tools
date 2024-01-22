@@ -1,7 +1,0 @@
-<table style="margin-left:auto; margin-right:auto; text-align:center;" class="table table-striped table-bordered centerTable" id="{replace_with_table_name}">
-<thead>
-<tr>
-{replace_text_here_with_columns}
-</tr>
-</thead>
-<tbody>
