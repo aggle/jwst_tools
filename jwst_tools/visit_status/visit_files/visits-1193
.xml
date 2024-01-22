@@ -1,0 +1,484 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<visitStatusReport observatory="JWST" program="1193">
+<title>Visit Information</title>
+
+<reportTime>Wed Jul 26 12:22:56 EDT 2023</reportTime>
+<visit observation="2" visit="1">
+<status>Archived</status>
+<target>FOMALHAUT-PSF-MIRI-CORON</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>1.14</hours>
+<startTime>Oct 21, 2022 17:30:44</startTime>
+<endTime>Oct 21, 2022 18:35:09</endTime>
+</visit>
+<visit observation="3" visit="1">
+<status>Archived</status>
+<target>FOMALHAUT-PSF-MIRI-CORON-BACK</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>0.21</hours>
+<startTime>Oct 21, 2022 18:35:13</startTime>
+<endTime>Oct 21, 2022 18:48:23</endTime>
+</visit>
+<visit observation="4" visit="1">
+<status>Archived</status>
+<target>FOMALHAUT-PSF-MIRI-CORON</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>1.03</hours>
+<startTime>Oct 21, 2022 18:48:27</startTime>
+<endTime>Oct 21, 2022 19:43:19</endTime>
+</visit>
+<visit observation="5" visit="1">
+<status>Archived</status>
+<target>FOMALHAUT-PSF-MIRI-CORON-BACK</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>0.43</hours>
+<startTime>Oct 21, 2022 19:43:23</startTime>
+<endTime>Oct 21, 2022 19:55:54</endTime>
+</visit>
+<visit observation="10" visit="1">
+<status>Archived</status>
+<target>FOMALHAUT-F1550C-BACK</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>0.48</hours>
+<startTime>Oct 21, 2022 22:42:43</startTime>
+<endTime>Oct 21, 2022 23:31:28</endTime>
+</visit>
+<visit observation="11" visit="1">
+<status>Archived</status>
+<target>FOMALHAUT-COPY-MIRI-CORON</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>0.63</hours>
+<startTime>Oct 22, 2022 03:55:42</startTime>
+<endTime>Oct 22, 2022 04:44:36</endTime>
+</visit>
+<visit observation="9" visit="1">
+<status>Archived</status>
+<target>FOMALHAUT-COPY-MIRI-CORON</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>0.82</hours>
+<startTime>Oct 21, 2022 21:59:00</startTime>
+<endTime>Oct 21, 2022 22:42:39</endTime>
+</visit>
+<visit observation="8" visit="1">
+<status>Archived</status>
+<target>FOMALHAUT-F2300C-BACK</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>0.48</hours>
+<startTime>Oct 21, 2022 21:19:30</startTime>
+<endTime>Oct 21, 2022 21:58:57</endTime>
+</visit>
+<visit observation="16" visit="1">
+<status>Archived</status>
+<target>FOMALHAUT</target>
+<configuration>NIRCam Coronagraphic Imaging</configuration>
+<hours>1.03</hours>
+<startTime>Oct 22, 2022 07:58:23</startTime>
+<endTime>Oct 22, 2022 09:09:00</endTime>
+</visit>
+<visit observation="19" visit="1">
+<status>Archived</status>
+<target>FOMALHAUT-PSF-NIRCAM</target>
+<configuration>NIRCam Coronagraphic Imaging</configuration>
+<hours>1.17</hours>
+<startTime>Oct 22, 2022 11:16:40</startTime>
+<endTime>Oct 22, 2022 12:18:46</endTime>
+</visit>
+<visit observation="18" visit="1">
+<status>Archived</status>
+<target>FOMALHAUT-PSF-NIRCAM</target>
+<configuration>NIRCam Coronagraphic Imaging</configuration>
+<hours>1.95</hours>
+<startTime>Oct 22, 2022 09:46:44</startTime>
+<endTime>Oct 22, 2022 11:16:36</endTime>
+</visit>
+<visit observation="6" visit="1">
+<status>Archived</status>
+<target>FOMALHAUT</target>
+<configuration>MIRI Imaging</configuration>
+<hours>0.80</hours>
+<startTime>Oct 21, 2022 19:55:58</startTime>
+<endTime>Oct 21, 2022 20:40:52</endTime>
+</visit>
+<visit observation="7" visit="1">
+<status>Archived</status>
+<target>FOMALHAUT-COPY-MIRI-CORON</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>0.70</hours>
+<startTime>Oct 21, 2022 20:40:56</startTime>
+<endTime>Oct 21, 2022 21:19:26</endTime>
+</visit>
+<visit observation="12" visit="1">
+<status>Archived</status>
+<target>FOMALHAUT-COPY-MIRI-CORON</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>0.69</hours>
+<startTime>Oct 22, 2022 04:44:40</startTime>
+<endTime>Oct 22, 2022 05:41:20</endTime>
+</visit>
+<visit observation="13" visit="1">
+<status>Archived</status>
+<target>FOMALHAUT</target>
+<configuration>MIRI Imaging</configuration>
+<hours>1.20</hours>
+<startTime>Oct 22, 2022 05:41:24</startTime>
+<endTime>Oct 22, 2022 06:13:55</endTime>
+</visit>
+<visit observation="14" visit="1">
+<status>Archived</status>
+<target>FOMALHAUT</target>
+<configuration>NIRCam Coronagraphic Imaging</configuration>
+<hours>0.72</hours>
+<startTime>Oct 22, 2022 06:13:59</startTime>
+<endTime>Oct 22, 2022 07:12:48</endTime>
+</visit>
+<visit observation="15" visit="1">
+<status>Archived</status>
+<target>FOMALHAUT</target>
+<configuration>NIRCam Coronagraphic Imaging</configuration>
+<hours>0.89</hours>
+<startTime>Oct 22, 2022 07:12:52</startTime>
+<endTime>Oct 22, 2022 07:58:19</endTime>
+</visit>
+<visit observation="17" visit="1">
+<status>Archived</status>
+<target>FOMALHAUT</target>
+<configuration>NIRCam Coronagraphic Imaging</configuration>
+<hours>0.87</hours>
+<startTime>Oct 22, 2022 09:09:04</startTime>
+<endTime>Oct 22, 2022 09:46:40</endTime>
+</visit>
+<visit observation="62" visit="1">
+<status>Archived</status>
+<target>FOMALHAUT-PSF-MIRI-F2550</target>
+<configuration>MIRI Imaging</configuration>
+<hours>1.20</hours>
+<startTime>Nov 13, 2022 06:25:23</startTime>
+<endTime>Nov 13, 2022 07:20:43</endTime>
+<repeatOf>
+<program>1193</program>
+<observation>1</observation>
+<visit>1</visit>
+<problemID>88588</problemID>
+</repeatOf>
+</visit>
+<visit observation="20" visit="1">
+<status>Implementation</status>
+<target>VEGA-PSF-MIRI-CORON-BACK</target>
+<configuration>MIRI Imaging</configuration>
+<hours>1.28</hours>
+<planWindow>Aug 17, 2023 - Aug 23, 2023 (2023.229 - 2023.235)</planWindow>
+</visit>
+<visit observation="21" visit="1">
+<status>Implementation</status>
+<target>VEGA-PSF-MIRI-F2550</target>
+<configuration>MIRI Imaging</configuration>
+<hours>0.61</hours>
+<planWindow>Aug 17, 2023 - Aug 23, 2023 (2023.229 - 2023.235)</planWindow>
+</visit>
+<visit observation="22" visit="1">
+<status>Implementation</status>
+<target>VEGA-PSF-MIRI-CORON</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>1.16</hours>
+<planWindow>Aug 17, 2023 - Aug 23, 2023 (2023.229 - 2023.235)</planWindow>
+</visit>
+<visit observation="23" visit="1">
+<status>Implementation</status>
+<target>VEGA-PSF-MIRI-CORON-BACK</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>0.38</hours>
+<planWindow>Aug 17, 2023 - Aug 23, 2023 (2023.229 - 2023.235)</planWindow>
+</visit>
+<visit observation="24" visit="1">
+<status>Implementation</status>
+<target>VEGA-PSF-MIRI-CORON</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>1.06</hours>
+<planWindow>Aug 17, 2023 - Aug 23, 2023 (2023.229 - 2023.235)</planWindow>
+</visit>
+<visit observation="25" visit="1">
+<status>Implementation</status>
+<target>VEGA-PSF-MIRI-CORON-BACK</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>0.37</hours>
+<planWindow>Aug 17, 2023 - Aug 23, 2023 (2023.229 - 2023.235)</planWindow>
+</visit>
+<visit observation="26" visit="1">
+<status>Implementation</status>
+<target>VEGA</target>
+<configuration>MIRI Imaging</configuration>
+<hours>0.94</hours>
+<planWindow>Aug 17, 2023 - Aug 23, 2023 (2023.229 - 2023.235)</planWindow>
+</visit>
+<visit observation="27" visit="1">
+<status>Implementation</status>
+<target>VEGA-COPY-MIRI-CORON</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>0.74</hours>
+<planWindow>Aug 17, 2023 - Aug 23, 2023 (2023.229 - 2023.235)</planWindow>
+</visit>
+<visit observation="28" visit="1">
+<status>Implementation</status>
+<target>VEGA-F2300C-BACK</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>0.86</hours>
+<planWindow>Aug 17, 2023 - Aug 23, 2023 (2023.229 - 2023.235)</planWindow>
+</visit>
+<visit observation="29" visit="1">
+<status>Implementation</status>
+<target>VEGA-COPY-MIRI-CORON</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>0.63</hours>
+<planWindow>Aug 17, 2023 - Aug 23, 2023 (2023.229 - 2023.235)</planWindow>
+</visit>
+<visit observation="30" visit="1">
+<status>Implementation</status>
+<target>VEGA-F1550C-BACK</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>0.83</hours>
+<planWindow>Aug 17, 2023 - Aug 23, 2023 (2023.229 - 2023.235)</planWindow>
+</visit>
+<visit observation="31" visit="1">
+<status>Implementation</status>
+<target>VEGA-COPY-MIRI-CORON</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>1.04</hours>
+<planWindow>Aug 17, 2023 - Aug 23, 2023 (2023.229 - 2023.235)</planWindow>
+</visit>
+<visit observation="32" visit="1">
+<status>Implementation</status>
+<target>VEGA-COPY-MIRI-CORON</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>0.71</hours>
+<planWindow>Aug 17, 2023 - Aug 23, 2023 (2023.229 - 2023.235)</planWindow>
+</visit>
+<visit observation="33" visit="1">
+<status>Implementation</status>
+<target>VEGA</target>
+<configuration>MIRI Imaging</configuration>
+<hours>0.65</hours>
+<planWindow>Aug 18, 2023 - Aug 23, 2023 (2023.230 - 2023.235)</planWindow>
+</visit>
+<visit observation="34" visit="1">
+<status>Implementation</status>
+<target>VEGA</target>
+<configuration>NIRCam Coronagraphic Imaging</configuration>
+<hours>1.03</hours>
+<planWindow>Aug 18, 2023 - Aug 23, 2023 (2023.230 - 2023.235)</planWindow>
+</visit>
+<visit observation="35" visit="1">
+<status>Implementation</status>
+<target>VEGA</target>
+<configuration>NIRCam Coronagraphic Imaging</configuration>
+<hours>0.78</hours>
+<planWindow>Aug 18, 2023 - Aug 23, 2023 (2023.230 - 2023.235)</planWindow>
+</visit>
+<visit observation="36" visit="1">
+<status>Implementation</status>
+<target>VEGA</target>
+<configuration>NIRCam Coronagraphic Imaging</configuration>
+<hours>1.15</hours>
+<planWindow>Aug 18, 2023 - Aug 24, 2023 (2023.230 - 2023.236)</planWindow>
+</visit>
+<visit observation="37" visit="1">
+<status>Implementation</status>
+<target>VEGA</target>
+<configuration>NIRCam Coronagraphic Imaging</configuration>
+<hours>0.65</hours>
+<planWindow>Aug 19, 2023 - Aug 24, 2023 (2023.231 - 2023.236)</planWindow>
+</visit>
+<visit observation="38" visit="1">
+<status>Implementation</status>
+<target>VEGA-PSF-NIRCAM</target>
+<configuration>NIRCam Coronagraphic Imaging</configuration>
+<hours>2.45</hours>
+<planWindow>Aug 19, 2023 - Aug 24, 2023 (2023.231 - 2023.236)</planWindow>
+</visit>
+<visit observation="39" visit="1">
+<status>Implementation</status>
+<target>VEGA-PSF-NIRCAM</target>
+<configuration>NIRCam Coronagraphic Imaging</configuration>
+<hours>0.90</hours>
+<planWindow>Aug 19, 2023 - Aug 24, 2023 (2023.231 - 2023.236)</planWindow>
+</visit>
+<visit observation="40" visit="1">
+<status>Implementation</status>
+<target>EPS-ERI-PSF-MIRI-CORON-BACK</target>
+<configuration>MIRI Imaging</configuration>
+<hours>1.28</hours>
+<planWindow>Feb 3, 2024 - Feb 4, 2024 (2024.034 - 2024.035)</planWindow>
+</visit>
+<visit observation="41" visit="1">
+<status>Implementation</status>
+<target>EPS-ERI-PSF-ALL</target>
+<configuration>MIRI Imaging</configuration>
+<hours>0.61</hours>
+<planWindow>Feb 4, 2024 - Feb 4, 2024 (2024.035 - 2024.035)</planWindow>
+</visit>
+<visit observation="42" visit="1">
+<status>Implementation</status>
+<target>EPS-ERI-PSF-MIRI-CORON</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>1.56</hours>
+<planWindow>Feb 4, 2024 - Feb 4, 2024 (2024.035 - 2024.035)</planWindow>
+</visit>
+<visit observation="43" visit="1">
+<status>Implementation</status>
+<target>EPS-ERI-PSF-MIRI-CORON-BACK</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>0.47</hours>
+<planWindow>Feb 4, 2024 - Feb 4, 2024 (2024.035 - 2024.035)</planWindow>
+</visit>
+<visit observation="44" visit="1">
+<status>Implementation</status>
+<target>EPS-ERI-PSF-MIRI-CORON</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>1.49</hours>
+<planWindow>Feb 4, 2024 - Feb 4, 2024 (2024.035 - 2024.035)</planWindow>
+</visit>
+<visit observation="45" visit="1">
+<status>Implementation</status>
+<target>EPS-ERI-PSF-MIRI-CORON-BACK</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>0.47</hours>
+<planWindow>Feb 4, 2024 - Feb 4, 2024 (2024.035 - 2024.035)</planWindow>
+</visit>
+<visit observation="46" visit="1">
+<status>Implementation</status>
+<target>EPS-ERI</target>
+<configuration>MIRI Imaging</configuration>
+<hours>0.98</hours>
+<planWindow>Feb 4, 2024 - Feb 4, 2024 (2024.035 - 2024.035)</planWindow>
+</visit>
+<visit observation="47" visit="1">
+<status>Implementation</status>
+<target>EPS-ERI-COPY-MIRI-CORON</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>0.74</hours>
+<planWindow>Feb 4, 2024 - Feb 4, 2024 (2024.035 - 2024.035)</planWindow>
+</visit>
+<visit observation="48" visit="1">
+<status>Implementation</status>
+<target>EPS-ERI-CORON-BACK</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>0.86</hours>
+<planWindow>Feb 4, 2024 - Feb 4, 2024 (2024.035 - 2024.035)</planWindow>
+</visit>
+<visit observation="49" visit="1">
+<status>Implementation</status>
+<target>EPS-ERI-COPY-MIRI-CORON</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>0.63</hours>
+<planWindow>Feb 4, 2024 - Feb 4, 2024 (2024.035 - 2024.035)</planWindow>
+</visit>
+<visit observation="50" visit="1">
+<status>Implementation</status>
+<target>EPS-ERI-CORON-BACK</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>0.83</hours>
+<planWindow>Feb 4, 2024 - Feb 4, 2024 (2024.035 - 2024.035)</planWindow>
+</visit>
+<visit observation="51" visit="1">
+<status>Implementation</status>
+<target>EPS-ERI-COPY-MIRI-CORON</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>1.04</hours>
+<planWindow>Feb 4, 2024 - Feb 4, 2024 (2024.035 - 2024.035)</planWindow>
+</visit>
+<visit observation="52" visit="1">
+<status>Implementation</status>
+<target>EPS-ERI-COPY-MIRI-CORON</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>0.71</hours>
+<planWindow>Feb 4, 2024 - Feb 4, 2024 (2024.035 - 2024.035)</planWindow>
+</visit>
+<visit observation="53" visit="1">
+<status>Implementation</status>
+<target>EPS-ERI</target>
+<configuration>MIRI Imaging</configuration>
+<hours>0.65</hours>
+<planWindow>Feb 4, 2024 - Feb 5, 2024 (2024.035 - 2024.036)</planWindow>
+</visit>
+<visit observation="54" visit="1">
+<status>Implementation</status>
+<target>EPS-ERI</target>
+<configuration>NIRCam Coronagraphic Imaging</configuration>
+<hours>1.05</hours>
+<planWindow>Feb 4, 2024 - Feb 5, 2024 (2024.035 - 2024.036)</planWindow>
+</visit>
+<visit observation="55" visit="1">
+<status>Implementation</status>
+<target>EPS-ERI</target>
+<configuration>NIRCam Coronagraphic Imaging</configuration>
+<hours>1.33</hours>
+<planWindow>Feb 4, 2024 - Feb 5, 2024 (2024.035 - 2024.036)</planWindow>
+</visit>
+<visit observation="56" visit="1">
+<status>Implementation</status>
+<target>EPS-ERI</target>
+<configuration>NIRCam Coronagraphic Imaging</configuration>
+<hours>1.61</hours>
+<planWindow>Feb 4, 2024 - Feb 5, 2024 (2024.035 - 2024.036)</planWindow>
+</visit>
+<visit observation="57" visit="1">
+<status>Implementation</status>
+<target>EPS-ERI</target>
+<configuration>NIRCam Coronagraphic Imaging</configuration>
+<hours>1.61</hours>
+<planWindow>Feb 5, 2024 - Feb 5, 2024 (2024.036 - 2024.036)</planWindow>
+</visit>
+<visit observation="58" visit="1">
+<status>Implementation</status>
+<target>EPS-ERI</target>
+<configuration>NIRCam Coronagraphic Imaging</configuration>
+<hours>0.86</hours>
+<planWindow>Feb 5, 2024 - Feb 5, 2024 (2024.036 - 2024.036)</planWindow>
+</visit>
+<visit observation="59" visit="1">
+<status>Implementation</status>
+<target>EPS-ERI-PSF-ALL</target>
+<configuration>NIRCam Coronagraphic Imaging</configuration>
+<hours>2.22</hours>
+<planWindow>Feb 5, 2024 - Feb 5, 2024 (2024.036 - 2024.036)</planWindow>
+</visit>
+<visit observation="60" visit="1">
+<status>Implementation</status>
+<target>EPS-ERI-PSF-ALL</target>
+<configuration>NIRCam Coronagraphic Imaging</configuration>
+<hours>1.18</hours>
+<planWindow>Feb 5, 2024 - Feb 5, 2024 (2024.036 - 2024.036)</planWindow>
+</visit>
+<visit observation="61" visit="1">
+<status>Implementation</status>
+<target>EPS-ERI</target>
+<configuration>NIRCam Coronagraphic Imaging</configuration>
+<hours>1.58</hours>
+<planWindow>Aug 8, 2023 - Aug 8, 2023 (2023.220 - 2023.220)</planWindow>
+</visit>
+<visit observation="63" visit="1">
+<status>Implementation</status>
+<target>EPS-ERI</target>
+<configuration>NIRCam Coronagraphic Imaging</configuration>
+<hours>1.23</hours>
+<planWindow>Aug 8, 2023 - Aug 9, 2023 (2023.220 - 2023.221)</planWindow>
+</visit>
+<visit observation="64" visit="1">
+<status>Implementation</status>
+<target>EPS-ERI-PSF-ALL</target>
+<configuration>NIRCam Coronagraphic Imaging</configuration>
+<hours>1.59</hours>
+<planWindow>Aug 8, 2023 - Aug 9, 2023 (2023.220 - 2023.221)</planWindow>
+</visit>
+<visit observation="1" visit="1">
+<status>Skipped</status>
+<target>FOMALHAUT-PSF-MIRI-F2550</target>
+<configuration>MIRI Imaging</configuration>
+<hours>1.20</hours>
+<repeatedBy>
+<program>1193</program>
+<observation>62</observation>
+<visit>1</visit>
+<problemID>88588</problemID>
+</repeatedBy>
+</visit>
+</visitStatusReport>

@@ -1,0 +1,163 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<visitStatusReport observatory="JWST" program="1194">
+<title>Visit Information</title>
+
+<reportTime>Wed Jul 26 12:23:27 EDT 2023</reportTime>
+<visit observation="7" visit="1">
+<status>Archived</status>
+<target>HR8799</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>0.83</hours>
+<startTime>Nov 7, 2022 20:01:40</startTime>
+<endTime>Nov 7, 2022 21:45:33</endTime>
+</visit>
+<visit observation="10" visit="1">
+<status>Archived</status>
+<target>HR8799-NOBGD</target>
+<configuration>MIRI Imaging</configuration>
+<hours>0.66</hours>
+<startTime>Nov 7, 2022 21:45:38</startTime>
+<endTime>Nov 7, 2022 22:33:17</endTime>
+</visit>
+<visit observation="13" visit="1">
+<status>Archived</status>
+<target>HR8799-BACKGROUND</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>0.95</hours>
+<startTime>Nov 7, 2022 22:33:21</startTime>
+<endTime>Nov 7, 2022 23:22:04</endTime>
+</visit>
+<visit observation="14" visit="1">
+<status>Archived</status>
+<target>HD-218261</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>1.40</hours>
+<startTime>Nov 7, 2022 23:22:08</startTime>
+<endTime>Nov 8, 2022 00:38:53</endTime>
+</visit>
+<visit observation="17" visit="1">
+<status>Archived</status>
+<target>HD-218261-NOBGD</target>
+<configuration>MIRI Imaging</configuration>
+<hours>0.65</hours>
+<startTime>Nov 8, 2022 00:38:57</startTime>
+<endTime>Nov 8, 2022 01:16:31</endTime>
+</visit>
+<visit observation="20" visit="1">
+<status>Archived</status>
+<target>HD-218261-BACKGROUND</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>0.42</hours>
+<startTime>Nov 8, 2022 01:16:35</startTime>
+<endTime>Nov 8, 2022 01:53:18</endTime>
+</visit>
+<visit observation="8" visit="1">
+<status>Archived</status>
+<target>HR8799</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>1.26</hours>
+<startTime>Nov 8, 2022 07:47:15</startTime>
+<endTime>Nov 8, 2022 08:51:02</endTime>
+</visit>
+<visit observation="9" visit="1">
+<status>Archived</status>
+<target>HR8799</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>1.72</hours>
+<startTime>Nov 8, 2022 08:51:06</startTime>
+<endTime>Nov 8, 2022 10:18:17</endTime>
+</visit>
+<visit observation="11" visit="1">
+<status>Archived</status>
+<target>HR8799-BACKGROUND</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>3.03</hours>
+<startTime>Nov 8, 2022 10:18:21</startTime>
+<endTime>Nov 8, 2022 13:10:25</endTime>
+</visit>
+<visit observation="12" visit="1">
+<status>Archived</status>
+<target>HR8799-BACKGROUND</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>0.89</hours>
+<startTime>Nov 8, 2022 13:10:29</startTime>
+<endTime>Nov 8, 2022 14:03:28</endTime>
+</visit>
+<visit observation="15" visit="1">
+<status>Archived</status>
+<target>HD-218261</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>1.35</hours>
+<startTime>Nov 8, 2022 14:03:32</startTime>
+<endTime>Nov 8, 2022 15:17:50</endTime>
+</visit>
+<visit observation="16" visit="1">
+<status>Archived</status>
+<target>HD-218261</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>1.13</hours>
+<startTime>Nov 8, 2022 15:17:54</startTime>
+<endTime>Nov 8, 2022 16:18:14</endTime>
+</visit>
+<visit observation="18" visit="1">
+<status>Archived</status>
+<target>HD-218261-BACKGROUND</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>0.40</hours>
+<startTime>Nov 8, 2022 16:18:18</startTime>
+<endTime>Nov 8, 2022 16:37:40</endTime>
+</visit>
+<visit observation="19" visit="1">
+<status>Archived</status>
+<target>HD-218261-BACKGROUND</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>0.36</hours>
+<startTime>Nov 8, 2022 16:37:45</startTime>
+<endTime>Nov 8, 2022 16:53:37</endTime>
+</visit>
+<visit observation="1" visit="1">
+<status>Archived</status>
+<target>HR8799</target>
+<configuration>NIRCam Coronagraphic Imaging</configuration>
+<hours>1.54</hours>
+<startTime>Nov 27, 2022 17:40:42</startTime>
+<endTime>Nov 27, 2022 19:08:23</endTime>
+</visit>
+<visit observation="6" visit="1">
+<status>Archived</status>
+<target>HR8799</target>
+<configuration>NIRCam Coronagraphic Imaging</configuration>
+<hours>1.25</hours>
+<startTime>Nov 27, 2022 21:03:50</startTime>
+<endTime>Nov 27, 2022 22:06:51</endTime>
+</visit>
+<visit observation="3" visit="1">
+<status>Archived</status>
+<target>HD220657</target>
+<configuration>NIRCam Coronagraphic Imaging</configuration>
+<hours>1.03</hours>
+<startTime>Nov 27, 2022 19:08:27</startTime>
+<endTime>Nov 27, 2022 20:01:11</endTime>
+</visit>
+<visit observation="2" visit="1">
+<status>Implementation</status>
+<target>HR8799</target>
+<configuration>NIRCam Coronagraphic Imaging</configuration>
+<hours>3.65</hours>
+<planWindow>Nov 4, 2023 - Nov 7, 2023 (2023.308 - 2023.311)</planWindow>
+</visit>
+<visit observation="4" visit="1">
+<status>Implementation</status>
+<target>HD220657</target>
+<configuration>NIRCam Coronagraphic Imaging</configuration>
+<hours>3.12</hours>
+<planWindow>Nov 4, 2023 - Nov 7, 2023 (2023.308 - 2023.311)</planWindow>
+</visit>
+<visit observation="5" visit="1">
+<status>Implementation</status>
+<target>HR8799</target>
+<configuration>NIRCam Coronagraphic Imaging</configuration>
+<hours>3.33</hours>
+<planWindow>Nov 4, 2023 - Nov 7, 2023 (2023.308 - 2023.311)</planWindow>
+</visit>
+</visitStatusReport>

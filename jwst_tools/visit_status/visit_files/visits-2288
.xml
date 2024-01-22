@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<visitStatusReport observatory="JWST" program="2288">
+<title>Visit Information</title>
+
+<reportTime>Wed Jan  4 17:25:09 GMT 2023</reportTime>
+<visit observation="1" visit="1">
+<status>Implementation</status>
+<target>2148+4003</target>
+<configuration>NIRSpec Fixed Slit Spectroscopy</configuration>
+<hours>1.84</hours>
+<planWindow>Sep 8, 2023 - Nov 2, 2023 (2023.251 - 2023.306)</planWindow>
+</visit>
+<visit observation="2" visit="1">
+<status>Implementation</status>
+<target>2148+4003</target>
+<configuration>MIRI Medium Resolution Spectroscopy</configuration>
+<hours>1.51</hours>
+<planWindow>Sep 8, 2023 - Nov 3, 2023 (2023.251 - 2023.307)</planWindow>
+</visit>
+<visit observation="3" visit="1">
+<status>Implementation</status>
+<target>0624-4521</target>
+<configuration>NIRSpec Fixed Slit Spectroscopy</configuration>
+<hours>1.90</hours>
+<planWindow>Feb 7, 2023 - Apr 3, 2023 (2023.038 - 2023.093)</planWindow>
+</visit>
+<visit observation="4" visit="1">
+<status>Implementation</status>
+<target>0624-4521</target>
+<configuration>MIRI Medium Resolution Spectroscopy</configuration>
+<hours>2.59</hours>
+<planWindow>Feb 7, 2023 - Apr 4, 2023 (2023.038 - 2023.094)</planWindow>
+</visit>
+</visitStatusReport>

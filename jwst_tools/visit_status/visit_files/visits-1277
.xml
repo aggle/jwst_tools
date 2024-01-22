@@ -1,0 +1,111 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<visitStatusReport observatory="JWST" program="1277">
+<title>Visit Information</title>
+
+<reportTime>Wed Jan  4 17:25:06 GMT 2023</reportTime>
+<visit observation="19" visit="1">
+<status>Scheduling</status>
+<target>ROSS458C</target>
+<configuration>NIRSpec IFU Spectroscopy</configuration>
+<hours>1.11</hours>
+<planWindow>May 12, 2023 - Jul 6, 2023 (2023.132 - 2023.187)</planWindow>
+</visit>
+<visit observation="1" visit="1">
+<status>Implementation</status>
+<target>HD-95086B</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>1.69</hours>
+<planWindow>Mar 5, 2023 - Apr 6, 2023 (2023.064 - 2023.096)</planWindow>
+</visit>
+<visit observation="2" visit="1">
+<status>Implementation</status>
+<target>HD-95086B</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>0.96</hours>
+<planWindow>Mar 5, 2023 - Apr 6, 2023 (2023.064 - 2023.096)</planWindow>
+</visit>
+<visit observation="4" visit="1">
+<status>Implementation</status>
+<target>HD-95086B</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>1.08</hours>
+<planWindow>Mar 5, 2023 - Apr 6, 2023 (2023.064 - 2023.096)</planWindow>
+</visit>
+<visit observation="5" visit="1">
+<status>Implementation</status>
+<target>HD-310459</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>1.77</hours>
+<planWindow>Mar 5, 2023 - Apr 6, 2023 (2023.064 - 2023.096)</planWindow>
+</visit>
+<visit observation="6" visit="1">
+<status>Implementation</status>
+<target>HD-310459</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>1.40</hours>
+<planWindow>Mar 5, 2023 - Apr 6, 2023 (2023.064 - 2023.096)</planWindow>
+</visit>
+<visit observation="8" visit="1">
+<status>Implementation</status>
+<target>HD-310459</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>1.09</hours>
+<planWindow>Mar 5, 2023 - Apr 6, 2023 (2023.064 - 2023.096)</planWindow>
+</visit>
+<visit observation="9" visit="1">
+<status>Implementation</status>
+<target>GJ-504-B</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>1.30</hours>
+<planWindow>May 18, 2023 - Jul 11, 2023 (2023.138 - 2023.192)</planWindow>
+</visit>
+<visit observation="10" visit="1">
+<status>Implementation</status>
+<target>GJ-504-B</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>0.45</hours>
+<planWindow>May 18, 2023 - Jul 11, 2023 (2023.138 - 2023.192)</planWindow>
+</visit>
+<visit observation="11" visit="1">
+<status>Implementation</status>
+<target>GJ-504-B</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>0.47</hours>
+<planWindow>May 18, 2023 - Jul 11, 2023 (2023.138 - 2023.192)</planWindow>
+</visit>
+<visit observation="14" visit="1">
+<status>Implementation</status>
+<target>HD-106906</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>1.13</hours>
+<planWindow>Jan 26, 2023 - Mar 22, 2023 (2023.026 - 2023.081)</planWindow>
+</visit>
+<visit observation="15" visit="1">
+<status>Implementation</status>
+<target>HD-106906</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>0.93</hours>
+<planWindow>Jan 26, 2023 - Mar 22, 2023 (2023.026 - 2023.081)</planWindow>
+</visit>
+<visit observation="16" visit="1">
+<status>Implementation</status>
+<target>HD-106906B-HODAPP</target>
+<configuration>MIRI Low Resolution Spectroscopy</configuration>
+<hours>0.98</hours>
+<planWindow>Feb 7, 2023 - Apr 3, 2023 (2023.038 - 2023.093)</planWindow>
+</visit>
+<visit observation="17" visit="1">
+<status>Implementation</status>
+<target>HD-106906B-HODAPP</target>
+<configuration>NIRSpec IFU Spectroscopy</configuration>
+<hours>1.13</hours>
+<planWindow>Feb 7, 2023 - Apr 4, 2023 (2023.038 - 2023.094)</planWindow>
+</visit>
+<visit observation="18" visit="1">
+<status>Implementation</status>
+<target>ROSS458C</target>
+<configuration>MIRI Medium Resolution Spectroscopy</configuration>
+<hours>1.88</hours>
+<planWindow>May 12, 2023 - Jul 6, 2023 (2023.132 - 2023.187)</planWindow>
+</visit>
+</visitStatusReport>

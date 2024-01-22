@@ -1,0 +1,326 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<visitStatusReport observatory="JWST" program="1241">
+<title>Visit Information</title>
+
+<reportTime>Wed Jul 26 12:23:50 EDT 2023</reportTime>
+<visit observation="35" visit="1">
+<status>Archived</status>
+<target>HR-2562-BKGRD</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>0.24</hours>
+<startTime>Mar 10, 2023 16:27:42</startTime>
+<endTime>Mar 10, 2023 16:40:20</endTime>
+</visit>
+<visit observation="37" visit="1">
+<status>Archived</status>
+<target>HR-2562</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>0.30</hours>
+<startTime>Mar 10, 2023 17:27:52</startTime>
+<endTime>Mar 10, 2023 17:43:39</endTime>
+</visit>
+<visit observation="38" visit="1">
+<status>Archived</status>
+<target>HR-2562</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>0.37</hours>
+<startTime>Mar 10, 2023 17:43:43</startTime>
+<endTime>Mar 10, 2023 18:02:04</endTime>
+</visit>
+<visit observation="39" visit="1">
+<status>Archived</status>
+<target>REF-HR-2562--HD-49518</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>0.77</hours>
+<startTime>Mar 10, 2023 18:02:07</startTime>
+<endTime>Mar 10, 2023 18:40:34</endTime>
+</visit>
+<visit observation="33" visit="1">
+<status>Archived</status>
+<target>HR-2562-BKGRD</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>1.68</hours>
+<startTime>Mar 10, 2023 15:05:01</startTime>
+<endTime>Mar 10, 2023 16:13:10</endTime>
+</visit>
+<visit observation="34" visit="1">
+<status>Archived</status>
+<target>HR-2562-BKGRD</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>0.24</hours>
+<startTime>Mar 10, 2023 16:13:13</startTime>
+<endTime>Mar 10, 2023 16:27:38</endTime>
+</visit>
+<visit observation="36" visit="1">
+<status>Archived</status>
+<target>HR-2562</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>0.85</hours>
+<startTime>Mar 10, 2023 16:40:24</startTime>
+<endTime>Mar 10, 2023 17:27:49</endTime>
+</visit>
+<visit observation="40" visit="1">
+<status>Archived</status>
+<target>REF-HR-2562--HD-49518</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>0.42</hours>
+<startTime>Mar 10, 2023 18:40:37</startTime>
+<endTime>Mar 10, 2023 19:02:56</endTime>
+</visit>
+<visit observation="43" visit="1">
+<status>Archived</status>
+<target>REF-HR-2562--BCKGR</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>0.25</hours>
+<startTime>Mar 10, 2023 20:10:33</startTime>
+<endTime>Mar 10, 2023 20:22:07</endTime>
+</visit>
+<visit observation="41" visit="1">
+<status>Archived</status>
+<target>REF-HR-2562--HD-49518</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>0.96</hours>
+<startTime>Mar 10, 2023 19:03:00</startTime>
+<endTime>Mar 10, 2023 19:53:18</endTime>
+</visit>
+<visit observation="42" visit="1">
+<status>Archived</status>
+<target>REF-HR-2562--BCKGR</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>0.39</hours>
+<startTime>Mar 10, 2023 19:53:22</startTime>
+<endTime>Mar 10, 2023 20:10:28</endTime>
+</visit>
+<visit observation="44" visit="1">
+<status>Archived</status>
+<target>REF-HR-2562--BCKGR</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>0.49</hours>
+<startTime>Mar 10, 2023 20:22:11</startTime>
+<endTime>Mar 10, 2023 20:45:03</endTime>
+</visit>
+<visit observation="1" visit="1">
+<status>Scheduling</status>
+<target>51-ERI-BCKG</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>3.81</hours>
+<planWindow>Jan 15, 2024 - Feb 28, 2024 (2024.015 - 2024.059)</planWindow>
+</visit>
+<visit observation="2" visit="1">
+<status>Scheduling</status>
+<target>51-ERI-BCKG</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>1.89</hours>
+<planWindow>Jan 16, 2024 - Feb 28, 2024 (2024.016 - 2024.059)</planWindow>
+</visit>
+<visit observation="3" visit="1">
+<status>Scheduling</status>
+<target>51-ERI-BCKG</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>3.57</hours>
+<planWindow>Jan 16, 2024 - Feb 28, 2024 (2024.016 - 2024.059)</planWindow>
+</visit>
+<visit observation="4" visit="1">
+<status>Scheduling</status>
+<target>51-ERI</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>1.95</hours>
+<planWindow>Jan 16, 2024 - Feb 28, 2024 (2024.016 - 2024.059)</planWindow>
+</visit>
+<visit observation="5" visit="1">
+<status>Scheduling</status>
+<target>51-ERI</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>1.13</hours>
+<planWindow>Jan 16, 2024 - Feb 28, 2024 (2024.016 - 2024.059)</planWindow>
+</visit>
+<visit observation="6" visit="1">
+<status>Scheduling</status>
+<target>51-ERI</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>2.04</hours>
+<planWindow>Jan 16, 2024 - Feb 28, 2024 (2024.016 - 2024.059)</planWindow>
+</visit>
+<visit observation="7" visit="1">
+<status>Scheduling</status>
+<target>REF-51-ERI--TYC-4739-392-1</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>1.75</hours>
+<planWindow>Jan 16, 2024 - Feb 28, 2024 (2024.016 - 2024.059)</planWindow>
+</visit>
+<visit observation="8" visit="1">
+<status>Scheduling</status>
+<target>REF-51-ERI--TYC-4739-392-1</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>0.92</hours>
+<planWindow>Jan 16, 2024 - Feb 28, 2024 (2024.016 - 2024.059)</planWindow>
+</visit>
+<visit observation="9" visit="1">
+<status>Scheduling</status>
+<target>REF-51-ERI--TYC-4739-392-1</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>1.10</hours>
+<planWindow>Jan 16, 2024 - Feb 28, 2024 (2024.016 - 2024.059)</planWindow>
+</visit>
+<visit observation="10" visit="1">
+<status>Scheduling</status>
+<target>REF-51-ERI--BCKGR</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>0.57</hours>
+<planWindow>Jan 16, 2024 - Feb 28, 2024 (2024.016 - 2024.059)</planWindow>
+</visit>
+<visit observation="11" visit="1">
+<status>Scheduling</status>
+<target>REF-51-ERI--BCKGR</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>0.35</hours>
+<planWindow>Jan 16, 2024 - Feb 28, 2024 (2024.016 - 2024.059)</planWindow>
+</visit>
+<visit observation="12" visit="1">
+<status>Scheduling</status>
+<target>REF-51-ERI--BCKGR</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>0.54</hours>
+<planWindow>Jan 16, 2024 - Feb 28, 2024 (2024.016 - 2024.059)</planWindow>
+</visit>
+<visit observation="13" visit="1">
+<status>Scheduling</status>
+<target>KAPPA-AND-BCKG</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>1.49</hours>
+<planWindow>Nov 19, 2023 - Dec 13, 2023 (2023.323 - 2023.347)</planWindow>
+</visit>
+<visit observation="14" visit="1">
+<status>Scheduling</status>
+<target>KAPPA-AND-BCKG</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>0.26</hours>
+<planWindow>Nov 19, 2023 - Dec 13, 2023 (2023.323 - 2023.347)</planWindow>
+</visit>
+<visit observation="15" visit="1">
+<status>Scheduling</status>
+<target>KAPPA-AND-BCKG</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>0.26</hours>
+<planWindow>Nov 19, 2023 - Dec 13, 2023 (2023.323 - 2023.347)</planWindow>
+</visit>
+<visit observation="16" visit="1">
+<status>Scheduling</status>
+<target>KAPPA-AND</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>0.77</hours>
+<planWindow>Nov 19, 2023 - Dec 13, 2023 (2023.323 - 2023.347)</planWindow>
+</visit>
+<visit observation="17" visit="1">
+<status>Scheduling</status>
+<target>KAPPA-AND</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>0.34</hours>
+<planWindow>Nov 19, 2023 - Dec 13, 2023 (2023.323 - 2023.347)</planWindow>
+</visit>
+<visit observation="18" visit="1">
+<status>Scheduling</status>
+<target>KAPPA-AND</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>0.40</hours>
+<planWindow>Nov 19, 2023 - Dec 13, 2023 (2023.323 - 2023.347)</planWindow>
+</visit>
+<visit observation="19" visit="1">
+<status>Scheduling</status>
+<target>REF-KAPPA-AND--HD-222389</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>0.75</hours>
+<planWindow>Nov 19, 2023 - Dec 14, 2023 (2023.323 - 2023.348)</planWindow>
+</visit>
+<visit observation="20" visit="1">
+<status>Scheduling</status>
+<target>REF-KAPPA-AND--HD-222389</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>0.35</hours>
+<planWindow>Nov 19, 2023 - Dec 14, 2023 (2023.323 - 2023.348)</planWindow>
+</visit>
+<visit observation="21" visit="1">
+<status>Scheduling</status>
+<target>REF-KAPPA-AND--HD-222389</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>0.66</hours>
+<planWindow>Nov 19, 2023 - Dec 14, 2023 (2023.323 - 2023.348)</planWindow>
+</visit>
+<visit observation="22" visit="1">
+<status>Scheduling</status>
+<target>REF-KAPPA-AND--BCKGR</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>0.39</hours>
+<planWindow>Nov 19, 2023 - Dec 14, 2023 (2023.323 - 2023.348)</planWindow>
+</visit>
+<visit observation="23" visit="1">
+<status>Scheduling</status>
+<target>REF-KAPPA-AND--BCKGR</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>0.19</hours>
+<planWindow>Nov 19, 2023 - Dec 14, 2023 (2023.323 - 2023.348)</planWindow>
+</visit>
+<visit observation="24" visit="1">
+<status>Scheduling</status>
+<target>REF-KAPPA-AND--BCKGR</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>0.33</hours>
+<planWindow>Nov 19, 2023 - Dec 14, 2023 (2023.323 - 2023.348)</planWindow>
+</visit>
+<visit observation="25" visit="1">
+<status>Scheduling</status>
+<target>BETA-PIC-BCKGR</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>0.92</hours>
+<planWindow>Aug 29, 2023 - Sep 17, 2023 (2023.241 - 2023.260)</planWindow>
+</visit>
+<visit observation="26" visit="1">
+<status>Scheduling</status>
+<target>BETA-PIC-BCKGR</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>0.18</hours>
+<planWindow>Aug 29, 2023 - Sep 17, 2023 (2023.241 - 2023.260)</planWindow>
+</visit>
+<visit observation="27" visit="1">
+<status>Scheduling</status>
+<target>BETA-PIC</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>0.55</hours>
+<planWindow>Aug 29, 2023 - Sep 17, 2023 (2023.241 - 2023.260)</planWindow>
+</visit>
+<visit observation="28" visit="1">
+<status>Scheduling</status>
+<target>BETA-PIC</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>0.39</hours>
+<planWindow>Aug 29, 2023 - Sep 17, 2023 (2023.241 - 2023.260)</planWindow>
+</visit>
+<visit observation="29" visit="1">
+<status>Scheduling</status>
+<target>REF2-BETA-PIC--CD-45-2093</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>0.74</hours>
+<planWindow>Aug 30, 2023 - Sep 17, 2023 (2023.242 - 2023.260)</planWindow>
+</visit>
+<visit observation="30" visit="1">
+<status>Scheduling</status>
+<target>REF2-BETA-PIC--CD-45-2093</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>0.45</hours>
+<planWindow>Aug 30, 2023 - Sep 17, 2023 (2023.242 - 2023.260)</planWindow>
+</visit>
+<visit observation="31" visit="1">
+<status>Scheduling</status>
+<target>REF2-BETA-PIC--BCKGR</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>0.41</hours>
+<planWindow>Aug 30, 2023 - Sep 17, 2023 (2023.242 - 2023.260)</planWindow>
+</visit>
+<visit observation="32" visit="1">
+<status>Scheduling</status>
+<target>REF2-BETA-PIC--BCKGR</target>
+<configuration>MIRI Coronagraphic Imaging</configuration>
+<hours>0.28</hours>
+<planWindow>Aug 30, 2023 - Sep 17, 2023 (2023.242 - 2023.260)</planWindow>
+</visit>
+</visitStatusReport>
