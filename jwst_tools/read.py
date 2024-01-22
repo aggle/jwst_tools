@@ -245,8 +245,10 @@ def organize_mast_files(files: list, extra_keys: dict[str, int] = {}):
     # pull out the file stem; useful for connecting pipeline products
     data_organizer['filestem'] = \
         data_organizer['filename'].apply(lambda el: '_'.join(el.split('_')[:-1]))
+    # make a column to preserve the unique file ID in the database
     data_organizer.reset_index(inplace=True)
-    data_organizer.rename(columns={'index': 'id'}, inplace=True)
+    data_organizer.rename(columns={'index': 'db_id'}, inplace=True)
+
     # add any extra keyword values
     fits_keys = set(extra_keys.keys())
     # make a column for each key
@@ -270,7 +272,7 @@ def organize_mast_files(files: list, extra_keys: dict[str, int] = {}):
     return data_organizer
 
 
-def organize_files_by_header(files, ext=0):
+def organize_files_by_header(files, ext=0, add_filepath=True):
     """
     Take a bunch of FITS files and combine their headers into a dataframe for sorting
 
@@ -278,8 +280,10 @@ def organize_files_by_header(files, ext=0):
     ----------
     files: list of strings or pathlib.Paths
       list of paths to fits files from jwst
-    ext : int
+    ext : int [0]
       number of the extension (0=PRI, 1=SCI, 2=ERR, etc)
+    add_filepath: bool [True]
+      if True, add a column called 'filepath' with the full path to the file
 
     Output
     ------
@@ -292,6 +296,11 @@ def organize_files_by_header(files, ext=0):
     for f in files:
         hdr = fits.getheader(str(f), ext)
         hdr = pd.Series(hdr)
+        # add the root folder
+        hdr['path'] = str(Path(f).parent)
+        hdr['filestem'] = '_'.join(Path(f).stem.split('_')[:-1])
+        if add_filepath == True:
+            hdr['filepath'] = str(Path(f).absolute())
         # drop duplicated index entries, usually this is "''"" and "COMMENT"
         drop_index = hdr.index[hdr.index.duplicated()]
         # hdr = hdr[~hdr.index.duplicated()]
@@ -305,10 +314,45 @@ def organize_files_by_header(files, ext=0):
                 pass
         hdrs.append(hdr)
     hdr_df = pd.concat(hdrs, axis=1).T
+    # make a column to preserve the unique file ID in the database
+    hdr_df.reset_index(inplace=True)
+    hdr_df.rename(columns={'index': 'db_id'}, inplace=True)
+
     return hdr_df
 
 def display_header(row):
-    """Convenience function to print a header"""
+    """Convenience function to print a header from an entry in the file manager dataframe"""
     filename = Path(row['path']) / row['filename']
     hdr = fits.getheader(filename)
     return hdr
+
+
+def print_columns(list_to_print, ncols=5, sort=False):
+    """
+    Print a list of items in columns.
+
+    Parameters
+    ----------
+    list_to_print : list
+      a list-like object of items to print. All members will be converted to strings.
+    ncols : int [5]
+      the number of columns
+    sort : bool [False]
+      if True, sort list alphabetically
+
+    Output
+    ------
+    no return value; prints to screen
+
+    """
+    list_to_print = [str(i) for i in list_to_print]
+    if sort == True:
+        list_to_print = sorted(list_to_print)
+    spacing = max([len(i) for i in list_to_print])
+    nitems = len(list_to_print)
+    nrows = int(nitems/ncols)
+    if nitems%ncols > 0:
+        nrows += 1 # this is equivalent to np.ceil
+
+    for i in range(nrows):
+        print(' '.join(f"{i:{spacing+2}s}" for i in list_to_print[i::nrows]))
