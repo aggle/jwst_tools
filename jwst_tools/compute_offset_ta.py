@@ -20,48 +20,45 @@ from pysiaf import Siaf
 ##### USER INPUT #####
 ######################
 # Star positions - make sure to enter all values.
-# Keys must be:
-# "TA" for the star used for TA, and
-# "Target" for the star that will be occulted in the end
+# The "slew_from" variable stores the position of the star that is used for TA.
+# the "slew_to" variable stores the position of the final target of the observations
 # The coordinates should be given *at the time of observation*
-star_positions = {
-    # the TA star
-    'Target': SkyCoord(
+slew_to = SkyCoord( # A component
         272.8136285869 * units.deg, # RA
         69.2500743163 * units.deg,  # Dec
-        (8.2679 * units.mas).to(units.parsec, equivalencies=units.parallax()), # dist, converting from parallax
         frame='icrs',
-        pm_ra_cosdec = 10.7067 * units.mas/units.year, 
-        pm_dec = 	30.4788 * units.mas/units.year,
-        obstime=Time("J2016.0"),
-    ),
-    # The star you will eventually slew to
-    'TA': SkyCoord(
+    )
+slew_from = SkyCoord( # B component
         272.812150608 * units.deg, 
         69.2489835698 * units.deg,
-        (8.2638 * units.mas).to(units.parsec, equivalencies=units.parallax()),
         frame='icrs',
-        pm_ra_cosdec = 9.4049 * units.mas/units.year, 
-        pm_dec = 30.9726 * units.mas/units.year,
-        obstime=Time("J2016.0"),
     )
-}
-# the date of the observation. Any format works as long as it can be converted to an astropy.time.Time object
-obstime = Time("J2024.0")
-# the PAV3 angle of the telescope at the time of observation
-v3_at_obstime = 100.0
+
+# enter the PA angle of the *telescope* V3 axis, at the time of the observation
+v3 = 320.0 
+
+# Choose a coronagraph by uncommenting one of these choices
+coron_id = [
+    # '1065',
+    # '1140',
+    '1550',
+    # 'LYOT',
+]
 ######################
 ### END USER INPUT ###
 ######################
 
-
 ###############################
 # Script takes over from here #
 ###############################
-
-# propagate the position forward in time
-star_positions = {star: pos.apply_space_motion(obstime) for star, pos in star_positions.items()}
-star_positions['v3'] = v3_at_obstime
+coron_id = coron_id[0]
+star_positions = {
+    # the TA star
+    'TA': slew_from,
+    # The star you will eventually slew to
+    'Target': slew_to,
+    'v3': v3
+}
 
 # Offsets
 sep = star_positions['TA'].separation(star_positions['Target']).to(units.arcsec)
@@ -73,11 +70,11 @@ print("Separation and PA: ", f"{sep.mas:0.2f} mas, {pa.degree:0.2f} deg")
 miri = Siaf("MIRI")
 # now that we have the MIRI object, let's get the 1550 coronagraph apertures used in 1618.
 # There are two relevant apertures: MIRIM_MASK1550, which is the entire subarray, and MIRIM_CORON1550, which is just the portion that gets illuminated
-mask1550 = miri['MIRIM_MASK1550']
-coro1550 = miri['MIRIM_CORON1550']
+mask = miri[f'MIRIM_MASK{coron_id}']
+coro = miri[f'MIRIM_CORON{coron_id}']
 # we also want the upper right (UR) and central upper right (CUR) target acquisition apertures
-ta_ur = miri[f'MIRIM_TA1550_UR']
-ta_cur = miri[f'MIRIM_TA1550_CUR']
+ta_ur = miri[f'MIRIM_TA{coron_id}_UR']
+ta_cur = miri[f'MIRIM_TA{coron_id}_CUR']
 
 def sky_to_idl(ta_pos, targ_pos, aper, pa):
     """
@@ -114,7 +111,7 @@ def sky_to_idl(ta_pos, targ_pos, aper, pa):
 
 idl_coords = sky_to_idl(star_positions['TA'], 
                           star_positions['Target'],
-                          coro1550,
+                          coro,
                           star_positions['v3'])
 
 
@@ -141,8 +138,8 @@ print(f"\tdY: {offset[1]:+2.3f} arcsec")
 fig, ax = plt.subplots(1, 1, )
 ax.set_title("""Positions *before* offset slew""")
 frame = 'idl' # options are: tel (telescope), det (detector), sci (aperture)
-mask1550.plot(ax=ax, label=False, frame=frame, c='C0')
-coro1550.plot(ax=ax, label=False, frame=frame, c='C1', mark_ref=True)
+mask.plot(ax=ax, label=False, frame=frame, c='C0')
+coro.plot(ax=ax, label=False, frame=frame, c='C1', mark_ref=True)
 ax.scatter(0, 0, c='C2', label='TA', marker='*', s=100)
 
 # print(f"\t", ', '.join(f"{i:+0.3e}" for i in idl_coords['targ']), "arcsec")
@@ -154,8 +151,8 @@ ax.grid(True, ls='--', c='grey', alpha=0.5)
 # Select your TA quadrant. 
 # Options are: UR (upper right, Q1), UL (upper left, Q2), LL (lower left, Q3) or LR (lower right, Q4).
 # A preceding "C" (CUL, CUL, CLL, CLR) indicates the inner TA region.
-ta_apers = {"UR": miri[f'MIRIM_TA1550_UR'],
-            "CUR": miri[f'MIRIM_TA1550_CUR']
+ta_apers = {"UR": ta_ur,
+            "CUR": ta_cur,
            }
 # use these apertures to compute the relative positions for every TA option.
 # really though it should be the same relative offset everywhere on the detector
@@ -173,9 +170,9 @@ fig.suptitle(f"TA sequence, as seen by the detector")
 
 # plot the SIAF apertures on every plot
 for ax in axes:
-    mask1550.plot(ax=ax, label=False, frame='det', fill=False, c='C0')
+    mask.plot(ax=ax, label=False, frame='det', fill=False, c='C0')
     ax.plot([], [], c='C0', label='Readout')
-    coro1550.plot(ax=ax, label=False, frame='det', mark_ref=True, fill=False, c='C1')
+    coro.plot(ax=ax, label=False, frame='det', mark_ref=True, fill=False, c='C1')
     ax.plot([], [], c='C1', label='Illuminated')
     for aper in ta_apers.values():
         aper.plot(ax=ax, label=False, frame='det', mark_ref=True, fill=False, c='C2')
@@ -221,15 +218,15 @@ ax.scatter(*targ_pos,
 ax = axes[2]
 ax.set_title("Step 3\n" + "TA star centered")
 # plot the final TA before the offset is applied
-ax.scatter(*coro1550.idl_to_det(*idl_coords['ta']), c='k', label='TA star', marker='x', s=100)
-ax.scatter(*coro1550.idl_to_det(*idl_coords['targ']), c='k', label='Target', marker='*', s=100)
+ax.scatter(*coro.idl_to_det(*idl_coords['ta']), c='k', label='TA star', marker='x', s=100)
+ax.scatter(*coro.idl_to_det(*idl_coords['targ']), c='k', label='Target', marker='*', s=100)
 
 # Offset applied
 ax = axes[3]
 ax.set_title("Step 4\n" + "Offset applied")
 # apply the offset to the position
-ta_pos  = coro1550.idl_to_det(*np.array(ta_sequence['UR']['ta']) + offset)
-targ_pos = coro1550.idl_to_det(*np.array(ta_sequence['UR']['targ']) + offset)
+ta_pos  = coro.idl_to_det(*np.array(ta_sequence['UR']['ta']) + offset)
+targ_pos = coro.idl_to_det(*np.array(ta_sequence['UR']['targ']) + offset)
 ax.scatter(*ta_pos, 
            c='k', label='TA star', marker='x', s=100)
 ax.scatter(*targ_pos, 
@@ -288,8 +285,8 @@ for ax in axes.ravel():
 all_apers = {}
 all_apers['UR'] = ta_apers['UR']
 all_apers['CUR'] = ta_apers['CUR']
-all_apers['coro'] = coro1550
-all_apers['mask'] = mask1550
+all_apers['coro'] = coro
+all_apers['mask'] = mask
 
 
 # We start TA in the outer TA region
@@ -335,7 +332,7 @@ ax = axes[2]
 ax.set_title("Step 3: Centered")
 
 # the telescope is now pointing the center of the coronagraph at the TA star
-v2, v3 = coro1550.reference_point('tel')
+v2, v3 = coro.reference_point('tel')
 # compute the attitude matrix when we're pointing directly at the TA target
 attmat = pysiaf.utils.rotations.attitude_matrix(v2, v3, 
                                                 ra=star_positions['TA'].ra.deg, 
@@ -349,11 +346,11 @@ plot_apers(ax, attmat, formatting)
 ax = axes[3]
 ax.set_title("Step 4: Offset applied")
 # the telescope now slews to the Target
-v2, v3 = coro1550.reference_point('tel')
+v2, v3 = coro.reference_point('tel')
 # compute the RA and Dec of the pointing using the offset values you found earlier
 # # note that you must CHANGE THE SIGN OF THE SLEW with respect to the previous plot
 
-ra, dec = coro1550.idl_to_sky(*(-offset))
+ra, dec = coro.idl_to_sky(*(-offset))
 
 attmat = pysiaf.utils.rotations.attitude_matrix(v2, v3, 
                                                 ra=ra, 
@@ -423,7 +420,7 @@ ax.plot([], [],
 # plot the final TA before the offset is applied
 
 # the telescope is now pointing the center of the coronagraph at the TA star
-v2, v3 = coro1550.reference_point('tel')
+v2, v3 = coro.reference_point('tel')
 # compute the attitude matrix when we're pointing directly at the TA target
 attmat = pysiaf.utils.rotations.attitude_matrix(v2, v3, 
                                                 ra=star_positions['TA'].ra.deg, 
@@ -438,9 +435,9 @@ ax.plot([], [],
 
 # ax = axes[3]
 # the telescope now places the TA star at the commanded offset
-v2, v3 = coro1550.reference_point('tel')
+v2, v3 = coro.reference_point('tel')
 # note that you must CHANGE THE SIGN OF THE OFFSET to get the position of the reference point
-ra, dec = coro1550.idl_to_sky(*(-offset))
+ra, dec = coro.idl_to_sky(*(-offset))
 attmat = pysiaf.utils.rotations.attitude_matrix(v2, v3, 
                                                 ra=ra, 
                                                 dec=dec, 
