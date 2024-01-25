@@ -159,7 +159,7 @@ def extract_visit_events(
     else:
         # failure mode: return no visit log
         print(f"No log found for Visit {visit_id}")
-        visit_text = None
+        visit_text = ''
     return visit_text
 
 
@@ -167,7 +167,7 @@ def extract_visit_events(
 def extract_MIRTAMAIN_events(
         visit_events : str,
         obs_id : str
-):
+) -> str:
     """
     From a single visit log, extract the MIRTAMAIN events
 
@@ -187,7 +187,7 @@ def extract_MIRTAMAIN_events(
     regex = re.compile(pattern, re.MULTILINE | re.DOTALL)
     match = regex.search(visit_events)
     if match is None:
-        return None
+        return ''
     ta_text = match.group()
     return ta_text
 
