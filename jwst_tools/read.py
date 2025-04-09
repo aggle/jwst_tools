@@ -291,10 +291,14 @@ def organize_files_by_header(files, ext=0, add_filepath=True):
       dataframe of all the file headers
 
     """
+    print(f"Organizing {len(files)} files...")
     # make a list of headers and format them
     hdrs = []
     for f in files:
-        hdr = fits.getheader(str(f), ext)
+        try:
+            hdr = fits.getheader(str(f), ext)
+        except OSError:
+            continue
         hdr = pd.Series(hdr)
         # add the root folder
         hdr['path'] = str(Path(f).parent)
