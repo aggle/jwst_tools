@@ -1,0 +1,26 @@
+
+[project]
+name = "jwst_tools"
+version = "0.1"
+description = "Analysis helper tools for JWST data (esp coronagraphic data)"
+readme = "README.md"
+authors = [
+    {name = "Jonathan Aguilar", email = "jaguilar@stsci.edu"},
+]
+dependencies = [
+    "astropy",
+    "jwst",
+    "matplotlib",
+    "numpy",
+    "pandas",
+    "shapely",
+]
+license = {text = "MIT"}
+requires-python = ">=3.12"
+
+[project.urls]
+Homepage = "https://github.com/aggle/jwst_tools"
+
+[build-system]
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
